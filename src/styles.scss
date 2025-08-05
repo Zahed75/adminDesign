@@ -1,0 +1,27 @@
+/* You can add global styles to this file, and also import other style files */
+@use './tailwind.css';
+@use './assets/layout/layout.scss';
+@use 'primeicons/primeicons.css';
+@use './assets/demo/demo.scss';
+
+
+/* In your global styles.css */
+.p-toast .p-toast-message {
+  @apply shadow-lg rounded-lg border-0;
+}
+
+.p-toast .p-toast-message-success {
+  @apply bg-green-100 text-green-800;
+}
+
+.p-toast .p-toast-message-error {
+  @apply bg-red-100 text-red-800;
+}
+
+.p-toast .p-toast-message-warn {
+  @apply bg-yellow-100 text-yellow-800;
+}
+
+.p-toast .p-toast-message-icon {
+  @apply text-2xl;
+}

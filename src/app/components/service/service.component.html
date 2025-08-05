@@ -1,0 +1,239 @@
+<div class="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+    <p-toast></p-toast>
+    <div class="max-w-4xl mx-auto">
+        <!-- Header Section -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">Create Service Request</h1>
+            <p class="mt-2 text-sm text-gray-600">
+                Provide the necessary details to create a new service request.
+            </p>
+        </div>
+
+        <!-- Service Creation Form -->
+        <form class="space-y-6" (ngSubmit)="onSubmit()">
+            <!-- Request Name -->
+            <div>
+                <label for="request-name" class="block text-sm font-medium text-gray-700">Request Name *</label>
+                <input
+                        type="text"
+                        id="request-name"
+                        name="requestName"
+                        [(ngModel)]="service.requestName"
+                        required
+                        placeholder="Enter request name"
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                />
+            </div>
+
+            <!-- Brand Selection -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Select Brand *</label>
+                <div class="flex border-b border-gray-200 mb-4">
+                    <button
+                            type="button"
+                            class="py-2 px-4 font-medium text-sm focus:outline-none"
+                            [ngClass]="{
+                            'text-indigo-600 border-b-2 border-indigo-600': activeBrandTab === 'user',
+                            'text-gray-500 hover:text-gray-700': activeBrandTab !== 'user'
+                        }"
+                            (click)="activeBrandTab = 'user'"
+                    >
+                        Your Brands
+                    </button>
+                    <button
+                            type="button"
+                            class="py-2 px-4 font-medium text-sm focus:outline-none"
+                            [ngClass]="{
+                            'text-indigo-600 border-b-2 border-indigo-600': activeBrandTab === 'all',
+                            'text-gray-500 hover:text-gray-700': activeBrandTab !== 'all'
+                        }"
+                            (click)="activeBrandTab = 'all'"
+                    >
+                        All Brands
+                    </button>
+                </div>
+
+                <!-- Loading State -->
+                <div *ngIf="loadingBrands" class="mt-2 p-4 bg-gray-100 rounded-md flex justify-center items-center">
+                    <i class="pi pi-spinner pi-spin text-indigo-600 mr-2"></i>
+                    <span class="text-gray-500">Loading brands...</span>
+                </div>
+
+                <!-- Brand Cards -->
+                <div *ngIf="!loadingBrands" class="mt-2">
+                    <!-- User Brands -->
+                    <div *ngIf="activeBrandTab === 'user'">
+                        <div *ngIf="userBrands.length === 0" class="mt-2 p-4 bg-gray-100 rounded-md">
+                            <p class="text-gray-500">You don't have any brands yet</p>
+                        </div>
+                        <div *ngIf="userBrands.length > 0" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                            <div
+                                    *ngFor="let brand of userBrands"
+                                    class="p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
+                                    [ngClass]="{ 'ring-2 ring-indigo-500 bg-indigo-50': brand.id === selectedBrand?.id }"
+                                    (click)="selectBrand(brand)"
+                            >
+                                <div class="flex flex-col items-center">
+                                    <img
+                                            [src]="brand.image"
+                                            (error)="handleImageError($event)"
+                                            alt="Brand Logo"
+                                            class="w-16 h-16 rounded-full object-cover border border-gray-200"
+                                    />
+                                    <h3 class="mt-2 text-sm font-medium text-gray-900 text-center">{{ brand.name }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- All Brands -->
+                    <div *ngIf="activeBrandTab === 'all'">
+                        <div *ngIf="allBrands.length === 0" class="mt-2 p-4 bg-gray-100 rounded-md">
+                            <p class="text-gray-500">No brands available</p>
+                        </div>
+                        <div *ngIf="allBrands.length > 0" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                            <div
+                                    *ngFor="let brand of allBrands"
+                                    class="p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
+                                    [ngClass]="{ 'ring-2 ring-indigo-500 bg-indigo-50': brand.id === selectedBrand?.id }"
+                                    (click)="selectBrand(brand)"
+                            >
+                                <div class="flex flex-col items-center">
+                                    <img
+                                            [src]="brand.image"
+                                            (error)="handleImageError($event)"
+                                            alt="Brand Logo"
+                                            class="w-16 h-16 rounded-full object-cover border border-gray-200"
+                                    />
+                                    <h3 class="mt-2 text-sm font-medium text-gray-900 text-center">{{ brand.name }}</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Category Selection -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Choose Category *</label>
+                <div *ngIf="loadingCategories" class="mt-2 p-4 bg-gray-100 rounded-md flex justify-center items-center">
+                    <i class="pi pi-spinner pi-spin text-indigo-600 mr-2"></i>
+                    <span class="text-gray-500">Loading categories...</span>
+                </div>
+                <div *ngIf="!loadingCategories && categories.length === 0" class="mt-2 p-4 bg-gray-100 rounded-md">
+                    <p class="text-gray-500">No categories available</p>
+                </div>
+                <div *ngIf="!loadingCategories && categories.length > 0" class="mt-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                    <div
+                            *ngFor="let category of categories"
+                            class="p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
+                            [ngClass]="{ 'ring-2 ring-indigo-500 bg-indigo-50': category.id === selectedCategory?.id }"
+                            (click)="selectCategory(category)"
+                    >
+                        <div class="flex flex-col items-center">
+                            <img
+                                    [src]="category.image"
+                                    (error)="handleImageError($event)"
+                                    alt="Category Image"
+                                    class="w-16 h-16 rounded-lg object-cover border border-gray-200"
+                            />
+                            <h3 class="mt-2 text-sm font-medium text-gray-900 text-center">{{ category.name }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Product Selection -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Choose Product *</label>
+                <div *ngIf="loadingProducts" class="mt-2 p-4 bg-gray-100 rounded-md flex justify-center items-center">
+                    <i class="pi pi-spinner pi-spin text-indigo-600 mr-2"></i>
+                    <span class="text-gray-500">Loading products...</span>
+                </div>
+                <div *ngIf="!loadingProducts && products.length === 0" class="mt-2 p-4 bg-gray-100 rounded-md">
+                    <p class="text-gray-500">No products available</p>
+                </div>
+                <div *ngIf="!loadingProducts && products.length > 0" class="mt-2 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+                    <div
+                            *ngFor="let product of products"
+                            class="p-4 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 transition-colors"
+                            [ngClass]="{ 'ring-2 ring-indigo-500 bg-indigo-50': product.id === selectedProduct?.id }"
+                            (click)="selectProduct(product)"
+                    >
+                        <div class="flex flex-col items-center">
+                            <img
+                                    [src]="product.image"
+                                    (error)="handleImageError($event)"
+                                    alt="Product Image"
+                                    class="w-16 h-16 rounded-lg object-cover border border-gray-200"
+                            />
+                            <h3 class="mt-2 text-sm font-medium text-gray-900 text-center">{{ product.name }}</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Describe Request -->
+            <div>
+                <p class="font-bold text-sm text-gray-600 mb-2">
+                    Format your paragraphs and create checklists to make your description easy to read and follow.
+                    Well-written instructions will result in better designs.
+                </p>
+                <label class="block text-sm font-medium text-gray-700">Describe Request *</label>
+                <div class="mt-2">
+                    <p-editor
+                            name="description"
+                            [(ngModel)]="richTextDescription"
+                            (onTextChange)="onDescriptionChange($event)"
+                            [style]="{ 'min-height': '200px' }"
+                            placeholder="Enter request description..."
+                            class="border border-gray-300 rounded-md"
+                    ></p-editor>
+                </div>
+            </div>
+
+            <!-- Attachment File -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Attachment File</label>
+                <div class="mt-2">
+                    <p-fileUpload
+                            name="attachment"
+                            mode="basic"
+                            chooseLabel="Upload File"
+                            [auto]="true"
+                            (onUpload)="onFileUpload($event)"
+                            accept="image/*,.pdf,.doc,.docx,.psd,.ai"
+                            maxFileSize="1000000"
+                    ></p-fileUpload>
+                    <small class="text-gray-500">Accepted formats: images, PDF, Word, PSD, AI (Max 1MB)</small>
+                </div>
+            </div>
+
+            <!-- File Deliverables -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">File Deliverables</label>
+                <div class="mt-2">
+                    <p-multiSelect
+                            name="fileDeliverables"
+                            [options]="fileDeliverables"
+                            [(ngModel)]="service.fileDeliverables"
+                            placeholder="Select file formats"
+                            class="w-full"
+                    ></p-multiSelect>
+                </div>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="pt-4">
+                <button
+                        type="submit"
+                        class="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors"
+                        [disabled]="loading"
+                >
+                    <i *ngIf="loading" class="pi pi-spinner pi-spin mr-2"></i>
+                    {{ loading ? 'Creating Service Request...' : 'Create Service Request' }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

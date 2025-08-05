@@ -1,0 +1,146 @@
+<div class="min-h-screen bg-gray-50 p-4 md:p-8">
+    <p-toast></p-toast>
+
+    <!-- Loading State -->
+    <div *ngIf="loading" class="flex justify-center items-center h-64">
+        <p-progressSpinner></p-progressSpinner>
+    </div>
+
+    <!-- Error State -->
+    <div *ngIf="error && !loading" class="bg-red-50 border-l-4 border-red-400 p-4 mb-6">
+        <div class="flex items-center">
+            <i class="pi pi-exclamation-triangle text-red-400 mr-3"></i>
+            <p class="text-red-700">{{ error }}</p>
+        </div>
+    </div>
+
+    <!-- Service Details -->
+    <div *ngIf="service && !loading" class="max-w-4xl mx-auto bg-white rounded-lg shadow overflow-hidden">
+        <!-- Header with actions -->
+        <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+            <h1 class="text-2xl font-bold text-gray-800">
+                <span *ngIf="!editMode">{{ service.name }}</span>
+                <input *ngIf="editMode" type="text" [(ngModel)]="service.name"
+                       class="w-full px-3 py-2 border rounded">
+            </h1>
+
+            <div class="flex space-x-2">
+                <button pButton icon="pi pi-pencil" *ngIf="!editMode"
+                        class="p-button-rounded p-button-text p-button-info"
+                        (click)="toggleEditMode()"></button>
+
+                <button pButton icon="pi pi-check" *ngIf="editMode" [loading]="saving"
+                        class="p-button-rounded p-button-success"
+                        (click)="saveChanges()"></button>
+
+                <button pButton icon="pi pi-times" *ngIf="editMode"
+                        class="p-button-rounded p-button-danger p-button-text"
+                        (click)="toggleEditMode()"></button>
+
+                <button pButton icon="pi pi-trash" [loading]="deleting"
+                        class="p-button-rounded p-button-danger p-button-text"
+                        (click)="deleteService()"></button>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="p-6 space-y-6">
+            <!-- Basic Information Section -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Brand Selection -->
+                <div>
+                    <h3 class="text-sm font-medium text-gray-500 mb-1">Brand *</h3>
+                    <div *ngIf="loadingBrands" class="p-2">
+                        <p-progressSpinner [style]="{width: '20px', height: '20px'}" strokeWidth="5"></p-progressSpinner>
+                    </div>
+                    <p *ngIf="!editMode && !loadingBrands">{{ getBrandName(service.brand) }}</p>
+                    <p-dropdown *ngIf="editMode && !loadingBrands" [options]="brands" [(ngModel)]="service.brand"
+                                optionLabel="name" optionValue="id" placeholder="Select Brand"
+                                class="w-full"></p-dropdown>
+                </div>
+
+                <!-- Category Selection -->
+                <div>
+                    <h3 class="text-sm font-medium text-gray-500 mb-1">Category *</h3>
+                    <div *ngIf="loadingCategories" class="p-2">
+                        <p-progressSpinner [style]="{width: '20px', height: '20px'}" strokeWidth="5"></p-progressSpinner>
+                    </div>
+                    <p *ngIf="!editMode && !loadingCategories">{{ getCategoryName(service.category) }}</p>
+                    <p-dropdown *ngIf="editMode && !loadingCategories" [options]="categories" [(ngModel)]="service.category"
+                                optionLabel="name" optionValue="id" placeholder="Select Category"
+                                class="w-full"></p-dropdown>
+                </div>
+
+                <!-- Product Selection -->
+                <div>
+                    <h3 class="text-sm font-medium text-gray-500 mb-1">Product *</h3>
+                    <div *ngIf="loadingProducts" class="p-2">
+                        <p-progressSpinner [style]="{width: '20px', height: '20px'}" strokeWidth="5"></p-progressSpinner>
+                    </div>
+                    <p *ngIf="!editMode && !loadingProducts">{{ getProductName(service.choose_product) }}</p>
+                    <p-dropdown *ngIf="editMode && !loadingProducts" [options]="products" [(ngModel)]="service.choose_product"
+                                optionLabel="name" optionValue="id" placeholder="Select Product"
+                                class="w-full"></p-dropdown>
+                </div>
+
+                <!-- File Delivery Option -->
+                <div>
+                    <h3 class="text-sm font-medium text-gray-500 mb-1">File Delivery Option *</h3>
+                    <p *ngIf="!editMode">{{ service.file_deliveryOption }}</p>
+                    <p-dropdown *ngIf="editMode" [options]="deliveryOptions" [(ngModel)]="service.file_deliveryOption"
+                                placeholder="Select Delivery Option" class="w-full"></p-dropdown>
+                </div>
+            </div>
+
+            <!-- Description -->
+            <div>
+                <h3 class="text-sm font-medium text-gray-500 mb-1">Description *</h3>
+                <div *ngIf="!editMode" class="prose max-w-none">
+                    <p>{{ service.description }}</p>
+                </div>
+                <p-editor *ngIf="editMode" [(ngModel)]="service.description"
+                          [style]="{ 'min-height': '200px' }"></p-editor>
+            </div>
+
+            <!-- Attachment Section -->
+            <div>
+                <h3 class="text-sm font-medium text-gray-500 mb-1">Attachment</h3>
+                <div *ngIf="service.attachment && !editMode">
+                    <a [href]="service.attachment" target="_blank"
+                       class="text-blue-600 hover:underline flex items-center">
+                        <i class="pi pi-download mr-2"></i>
+                        Download Current Attachment
+                    </a>
+                </div>
+                <div *ngIf="editMode">
+                    <p-fileUpload mode="basic" name="attachment"
+                                  accept="image/*,.pdf,.doc,.docx"
+                                  maxFileSize="1000000"
+                                  chooseLabel="Replace Attachment"
+                                  (onSelect)="onAttachmentUpload($event)">
+                    </p-fileUpload>
+                    <small class="text-gray-500 block mt-1">Accepted formats: images, PDF, Word (Max 1MB)</small>
+                </div>
+            </div>
+
+            <!-- Status and Dates Section -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-4 border-t border-gray-200">
+                <!-- Status -->
+                <div>
+                    <h3 class="text-sm font-medium text-gray-500 mb-1">Status</h3>
+                    <p-tag [value]="service.status" [severity]="getSeverity(service.status)"></p-tag>
+                </div>
+
+                <!-- Dates -->
+                <div>
+                    <h3 class="text-sm font-medium text-gray-500">Created</h3>
+                    <p>{{ service.created_at | date:'medium' }}</p>
+                </div>
+                <div *ngIf="service.updated_at">
+                    <h3 class="text-sm font-medium text-gray-500">Last Updated</h3>
+                    <p>{{ service.updated_at | date:'medium' }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

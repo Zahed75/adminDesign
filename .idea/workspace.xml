@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="04539420-98e5-434f-8cc1-d03d89954d84" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/.tsbuildinfo" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/.tsbuildinfo" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/@angular_animations.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/@angular_animations.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/@angular_common.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/@angular_common.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/@angular_common_http.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/@angular_common_http.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/@angular_core.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/@angular_core.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/@angular_forms.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/@angular_forms.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/@angular_platform-browser.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/@angular_platform-browser.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/@angular_platform-browser_animations_async.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/@angular_platform-browser_animations_async.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/@angular_router.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/@angular_router.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/_metadata.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/browser-IPKF3ZW3.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/browser-IPKF3ZW3.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-2YSJEV73.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-2YSJEV73.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-3D4FGWCN.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-3D4FGWCN.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-53W2EHZO.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-53W2EHZO.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-77H7EOQX.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-77H7EOQX.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-G7QUDAEI.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-G7QUDAEI.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-GQRMS6NA.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-GQRMS6NA.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-HWFIWH6L.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-HWFIWH6L.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-JNES73ON.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-JNES73ON.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-KEH2KR5X.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-KEH2KR5X.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-OD6LWCVW.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-OD6LWCVW.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-QGYKNBZZ.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-QGYKNBZZ.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-SQDI35WH.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-SQDI35WH.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-VAX3LMNE.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-VAX3LMNE.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-WG5MARZ6.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-WG5MARZ6.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-YXNYVPBM.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-YXNYVPBM.js.map" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_api.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_api.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_avatar.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_avatar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_badge.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_badge.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_button.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_button.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_card.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_card.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_chart.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_chart.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_config.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_config.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_confirmdialog.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_confirmdialog.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_dialog.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_dialog.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_dropdown.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_dropdown.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_editor.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_editor.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_fileupload.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_fileupload.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_inputtext.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_inputtext.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_inputtextarea.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_inputtextarea.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_menu.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_menu.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_multiselect.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_multiselect.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_progressspinner.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_progressspinner.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_ripple.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_ripple.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_selectbutton.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_selectbutton.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_styleclass.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_styleclass.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_table.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_table.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_tag.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_tag.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_toast.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_toast.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_tooltip.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_tooltip.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="TypeScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="2uRqSUw5pKVokSDs2LsGKH8xyzK" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/md.zahedhasanrabbi/Downloads/Development/AngularFrontend/adminDesign&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;prettierjs.PrettierConfiguration.Package&quot;: &quot;/Users/md.zahedhasanrabbi/Downloads/FreelanceProject/AngularFrontend/sakai-ng/node_modules/prettier&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;watcher.settings&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;/Users/md.zahedhasanrabbi/Downloads/Development/AngularFrontend/adminDesign/node_modules/typescript/lib&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/public/assets/images/preview" />
+    </key>
+  </component>
+  <component name="RunManager" selected="npm.Angular CLI Server">
+    <configuration name="Angular Application" type="JavascriptDebugType" uri="http://localhost:4200">
+      <method v="2" />
+    </configuration>
+    <configuration name="Angular CLI Server" type="js.build_tools.npm">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="start" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-js-predefined-d6986cc7102b-6a121458b545-JavaScript-WS-251.25410.117" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="04539420-98e5-434f-8cc1-d03d89954d84" name="Changes" comment="" />
+      <created>1742221734855</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1742221734855</updated>
+      <workItem from="1742221736704" duration="414000" />
+      <workItem from="1742296370343" duration="6243000" />
+      <workItem from="1742327622339" duration="7131000" />
+      <workItem from="1742381889006" duration="14906000" />
+      <workItem from="1742475533702" duration="608000" />
+      <workItem from="1742488490062" duration="8111000" />
+      <workItem from="1742580947105" duration="4250000" />
+      <workItem from="1742599164148" duration="3076000" />
+      <workItem from="1742652266308" duration="1956000" />
+      <workItem from="1742736632604" duration="40000" />
+      <workItem from="1742736704967" duration="1419000" />
+      <workItem from="1742772401531" duration="2402000" />
+      <workItem from="1742814748326" duration="10150000" />
+      <workItem from="1742913295109" duration="20082000" />
+      <workItem from="1743003879437" duration="2324000" />
+      <workItem from="1743113440056" duration="5771000" />
+      <workItem from="1743185978764" duration="8602000" />
+      <workItem from="1743202168118" duration="2207000" />
+      <workItem from="1743365699796" duration="6910000" />
+      <workItem from="1743658406243" duration="3694000" />
+      <workItem from="1743789774742" duration="4859000" />
+      <workItem from="1743833401115" duration="1862000" />
+      <workItem from="1743850758233" duration="8890000" />
+      <workItem from="1743873317660" duration="3953000" />
+      <workItem from="1743925950158" duration="3429000" />
+      <workItem from="1743937286100" duration="3556000" />
+      <workItem from="1744121127203" duration="3248000" />
+      <workItem from="1744135500127" duration="4505000" />
+      <workItem from="1744147071622" duration="2483000" />
+      <workItem from="1744174323736" duration="1818000" />
+      <workItem from="1744281587782" duration="2565000" />
+      <workItem from="1744285873260" duration="27678000" />
+      <workItem from="1744390520201" duration="12798000" />
+      <workItem from="1744456720458" duration="10756000" />
+      <workItem from="1744531893578" duration="2282000" />
+      <workItem from="1744703238178" duration="6514000" />
+      <workItem from="1744908097343" duration="4008000" />
+      <workItem from="1744920416104" duration="1087000" />
+      <workItem from="1744976431958" duration="5000" />
+      <workItem from="1745154502352" duration="21402000" />
+      <workItem from="1745243498302" duration="796000" />
+      <workItem from="1745339230473" duration="4000" />
+      <workItem from="1747563335083" duration="2509000" />
+      <workItem from="1754410110834" duration="2120000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

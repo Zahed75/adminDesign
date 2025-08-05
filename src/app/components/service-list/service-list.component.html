@@ -1,0 +1,99 @@
+<div class="p-4">
+    <!-- Status Filters -->
+    <div *ngIf="loading" class="text-center p-4">
+        <p>Loading services, please wait...</p>
+    </div>
+    <div class="mb-4">
+        <p-button
+                *ngFor="let status of statusFilters"
+                [label]="status"
+                [outlined]="selectedStatus !== status"
+                [severity]="selectedStatus === status ? 'primary' : 'secondary'"
+                (click)="selectedStatus = status"
+                class="mr-2"
+        />
+    </div>
+
+    <!-- Loading Indicator -->
+    <div *ngIf="loading" class="p-4 flex justify-content-center">
+        <p-progressSpinner></p-progressSpinner>
+    </div>
+
+    <!-- Table -->
+    <p-table [value]="filteredServices" [tableStyle]="{ 'min-width': '60rem' }" *ngIf="!loading">
+        <!-- Table Caption -->
+        <ng-template #caption>
+            <div class="flex items-center justify-between">
+                <span class="text-xl font-bold">Service List</span>
+                <p-button icon="pi pi-refresh" (click)="refreshServices()" rounded raised />
+            </div>
+        </ng-template>
+
+        <!-- Table Header -->
+        <ng-template #header>
+            <tr>
+                <th>Service Id</th>
+                <th>Name</th>
+                <th>Requested Date</th>
+                <th>Work Status</th>
+                <th>Actions</th>
+            </tr>
+        </ng-template>
+
+        <!-- Table Body -->
+        <ng-template pTemplate="body" let-service>
+            <tr>
+                <td>{{ service.id }}</td>
+                <td>
+                    <a [routerLink]="['/app/service', service.id]" class="text-primary-600 hover:text-primary-800 hover:underline">
+                        {{ service.name }}
+                    </a>
+                </td>
+                <td>{{ service.created_at | date: 'mediumDate' }}</td>
+                <td>
+                    <p-tag [value]="service.status" [severity]="getSeverity(service.status)" />
+                </td>
+                <td>
+                    <p-button
+                            icon="pi pi-eye"
+                            styleClass="p-button-rounded p-button-info p-button-text mr-2"
+                            [routerLink]="['/app/service', service.id]"
+                            pTooltip="View Details"
+                            tooltipPosition="top"
+                    />
+                    <p-button
+                            icon="pi pi-pencil"
+                            styleClass="p-button-rounded p-button-success p-button-text mr-2"
+                            (click)="editService(service)"
+                            pTooltip="Edit"
+                            tooltipPosition="top"
+                    />
+                    <p-button
+                            type="button"
+                            icon="pi pi-trash"
+                            styleClass="p-button-rounded p-button-danger p-button-text"
+                            (click)="deleteService(service)"
+                            pTooltip="Delete"
+                            tooltipPosition="top"
+                            [loading]="deleteLoading"
+                    />
+
+                </td>
+            </tr>
+        </ng-template>
+
+        <!-- Empty Message -->
+        <ng-template>
+            <tr>
+                <td colspan="5" class="text-center py-4">
+                    No services found
+                </td>
+            </tr>
+        </ng-template>
+
+        <!-- Table Footer -->
+        <ng-template #footer>
+            Showing {{ filteredServices.length }} of {{ services.length }} services
+        </ng-template>
+    </p-table>
+</div>

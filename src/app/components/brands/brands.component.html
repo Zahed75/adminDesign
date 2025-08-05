@@ -1,0 +1,516 @@
+<!--<div class="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">-->
+<!--    <div class="max-w-3xl mx-auto">-->
+<!--        &lt;!&ndash; Header Section &ndash;&gt;-->
+<!--        <div class="text-center mb-8">-->
+<!--            <h1 class="text-3xl font-bold text-gray-900">{{ isEditMode ? 'Update' : 'Create' }} Your Brand</h1>-->
+<!--            <p class="mt-2 text-sm text-gray-600">-->
+<!--                Define your brand identity by providing the necessary details below.-->
+<!--            </p>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Error Message &ndash;&gt;-->
+<!--        <div *ngIf="errorMessage" class="mb-4 p-4 bg-red-100 border-l-4 border-red-500 text-red-700">-->
+<!--            <p>{{ errorMessage }}</p>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Success Message &ndash;&gt;-->
+<!--        <div *ngIf="successMessage" class="mb-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-700">-->
+<!--            <p>{{ successMessage }}</p>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Loading Indicator &ndash;&gt;-->
+<!--        <div *ngIf="isLoading" class="mb-4 p-4 bg-blue-100 border-l-4 border-blue-500 text-blue-700">-->
+<!--            <p>Processing your request...</p>-->
+<!--        </div>-->
+
+<!--        &lt;!&ndash; Brand Creation Form &ndash;&gt;-->
+<!--        <form class="space-y-6" (ngSubmit)="onSubmit()">-->
+<!--            &lt;!&ndash; Brand Name &ndash;&gt;-->
+<!--            <div>-->
+<!--                <label for="brand-name" class="block text-sm font-medium text-gray-700">Brand Name *</label>-->
+<!--                <input-->
+<!--                        type="text"-->
+<!--                        id="brand-name"-->
+<!--                        name="brand-name"-->
+<!--                        placeholder="Enter your brand name"-->
+<!--                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"-->
+<!--                        [(ngModel)]="brand.industryName"-->
+<!--                        required-->
+<!--                />-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Brand Description &ndash;&gt;-->
+<!--            <div>-->
+<!--                <label for="brand-description" class="block text-sm font-medium text-gray-700">Brand Description *</label>-->
+<!--                <textarea-->
+<!--                        id="brand-description"-->
+<!--                        name="brand-description"-->
+<!--                        rows="3"-->
+<!--                        placeholder="Describe your brand"-->
+<!--                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"-->
+<!--                        [(ngModel)]="brand.description"-->
+<!--                        required-->
+<!--                ></textarea>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Website &ndash;&gt;-->
+<!--            <div>-->
+<!--                <label for="website" class="block text-sm font-medium text-gray-700">Website *</label>-->
+<!--                <input-->
+<!--                        type="text"-->
+<!--                        id="website"-->
+<!--                        name="website"-->
+<!--                        placeholder="Enter your website URL"-->
+<!--                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"-->
+<!--                        [(ngModel)]="brand.website"-->
+<!--                        required-->
+<!--                />-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Brand Colors &ndash;&gt;-->
+<!--            <div>-->
+<!--                <label class="block text-sm font-medium text-gray-700">Brand Colors *</label>-->
+<!--                &lt;!&ndash; Color Palette &ndash;&gt;-->
+<!--                <div class="mt-2 flex flex-wrap gap-2">-->
+<!--                    &lt;!&ndash; Predefined Colors &ndash;&gt;-->
+<!--                    <div-->
+<!--                            *ngFor="let color of predefinedColors"-->
+<!--                            class="w-8 h-8 rounded-full cursor-pointer border-2 border-transparent hover:border-gray-400"-->
+<!--                            [style.backgroundColor]="color"-->
+<!--                            (click)="selectColor(color)"-->
+<!--                            [class.border-gray-400]="brand.brandColor && brand.brandColor.includes(color)"-->
+<!--                    ></div>-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash; Custom Color Picker &ndash;&gt;-->
+<!--                <div class="mt-4">-->
+<!--                    <label for="custom-color" class="block text-sm font-medium text-gray-700">Add Custom Color</label>-->
+<!--                    <input-->
+<!--                            type="color"-->
+<!--                            id="custom-color"-->
+<!--                            name="custom-color"-->
+<!--                            class="mt-1 block w-full h-10 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"-->
+<!--                            (change)="selectColor($any($event.target).value)"-->
+<!--                    />-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash; Selected Colors Display &ndash;&gt;-->
+<!--                <div class="mt-4">-->
+<!--                    <label class="block text-sm font-medium text-gray-700">-->
+<!--                        Selected Colors ({{brand.brandColor ? brand.brandColor.split(',').length : 0}})-->
+<!--                    </label>-->
+<!--                    <div class="mt-2 flex flex-wrap gap-2">-->
+<!--                        <div-->
+<!--                                *ngFor="let color of (brand.brandColor ? brand.brandColor.split(',') : [])"-->
+<!--                                class="relative w-8 h-8 rounded-full"-->
+<!--                                [style.backgroundColor]="color"-->
+<!--                        >-->
+<!--                            <button-->
+<!--                                    class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"-->
+<!--                                    (click)="removeColor(color)"-->
+<!--                            >-->
+<!--                                ×-->
+<!--                            </button>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash; Reset All Colors Button &ndash;&gt;-->
+<!--                <div class="mt-4">-->
+<!--                    <button-->
+<!--                            type="button"-->
+<!--                            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 text-sm"-->
+<!--                            (click)="resetColors()"-->
+<!--                    >-->
+<!--                        Reset All Colors-->
+<!--                    </button>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Logo Upload &ndash;&gt;-->
+<!--            <div>-->
+<!--                <label for="logo-upload" class="block text-sm font-medium text-gray-700">Logo Upload *</label>-->
+<!--                <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">-->
+<!--                    <div class="space-y-1 text-center">-->
+<!--                        <div class="flex text-sm text-gray-600">-->
+<!--                            <label for="logo-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">-->
+<!--                                <span>Upload a file</span>-->
+<!--                                <input id="logo-upload" name="logo-upload" type="file" class="sr-only" (change)="onFileSelected($event, 'logo')" accept="image/*" />-->
+<!--                            </label>-->
+<!--                            <p class="pl-1">or drag and drop</p>-->
+<!--                        </div>-->
+<!--                        <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>-->
+<!--                        <p *ngIf="brand.logo" class="text-xs text-green-500 mt-2">{{ brand.logo.name }}</p>-->
+<!--                        <p *ngIf="brand.brandLogo && !brand.logo" class="text-xs text-green-500 mt-2">Current logo: {{ brand.brandLogo }}</p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Brand Guidelines Upload &ndash;&gt;-->
+<!--            <div>-->
+<!--                <label for="guidelines-upload" class="block text-sm font-medium text-gray-700">Brand Guidelines Upload</label>-->
+<!--                <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">-->
+<!--                    <div class="space-y-1 text-center">-->
+<!--                        <div class="flex text-sm text-gray-600">-->
+<!--                            <label for="guidelines-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">-->
+<!--                                <span>Upload a file</span>-->
+<!--                                <input id="guidelines-upload" name="guidelines-upload" type="file" class="sr-only" (change)="onFileSelected($event, 'guidelines')" accept=".pdf,.doc,.docx" />-->
+<!--                            </label>-->
+<!--                            <p class="pl-1">or drag and drop</p>-->
+<!--                        </div>-->
+<!--                        <p class="text-xs text-gray-500">PDF, DOCX up to 10MB</p>-->
+<!--                        <p *ngIf="brand.guidelines" class="text-xs text-green-500 mt-2">{{ brand.guidelines.name }}</p>-->
+<!--                        <p *ngIf="brand.brandGuide && !brand.guidelines" class="text-xs text-green-500 mt-2">Current guidelines: {{ brand.brandGuide }}</p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Fonts Upload &ndash;&gt;-->
+<!--            <div>-->
+<!--                <label for="fonts-upload" class="block text-sm font-medium text-gray-700">Fonts Upload</label>-->
+<!--                <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">-->
+<!--                    <div class="space-y-1 text-center">-->
+<!--                        <div class="flex text-sm text-gray-600">-->
+<!--                            <label for="fonts-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">-->
+<!--                                <span>Upload a file</span>-->
+<!--                                <input id="fonts-upload" name="fonts-upload" type="file" class="sr-only" (change)="onFileSelected($event, 'fonts')" accept=".ttf,.otf" />-->
+<!--                            </label>-->
+<!--                            <p class="pl-1">or drag and drop</p>-->
+<!--                        </div>-->
+<!--                        <p class="text-xs text-gray-500">TTF, OTF up to 10MB</p>-->
+<!--                        <p *ngIf="brand.fonts" class="text-xs text-green-500 mt-2">{{ brand.fonts.name }}</p>-->
+<!--                        <p *ngIf="brand.brandFonts && !brand.fonts" class="text-xs text-green-500 mt-2">Current fonts: {{ brand.brandFonts }}</p>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+
+<!--            &lt;!&ndash; Form Actions &ndash;&gt;-->
+<!--            <div class="flex justify-end gap-4 pt-4">-->
+<!--                <button-->
+<!--                        type="button"-->
+<!--                        class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 text-sm"-->
+<!--                        (click)="resetForm()"-->
+<!--                        *ngIf="isEditMode"-->
+<!--                >-->
+<!--                    Cancel-->
+<!--                </button>-->
+<!--                <button-->
+<!--                        type="submit"-->
+<!--                        class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"-->
+<!--                        [disabled]="isLoading"-->
+<!--                >-->
+<!--                    {{ isEditMode ? 'Update Brand' : 'Create Brand' }}-->
+<!--                </button>-->
+<!--            </div>-->
+<!--        </form>-->
+
+<!--        &lt;!&ndash; Brands List Section &ndash;&gt;-->
+<!--        <div class="mt-12">-->
+<!--            <div class="bg-white p-6 rounded-lg shadow">-->
+<!--                <h2 class="text-xl font-semibold text-gray-800 mb-4">Your Brands</h2>-->
+
+<!--                <div *ngIf="brands.length === 0" class="text-center py-8 text-gray-500">-->
+<!--                    No brands found. Create your first brand!-->
+<!--                </div>-->
+
+<!--                <div class="space-y-4">-->
+<!--                    <div *ngFor="let brand of brands" class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50">-->
+<!--                        <div class="flex justify-between items-start">-->
+<!--                            <div>-->
+<!--                                <h3 class="font-medium text-gray-900">{{ brand.industryName }}</h3>-->
+<!--                                <p class="text-sm text-gray-500 mt-1">{{ brand.description }}</p>-->
+<!--                                <p class="text-sm text-blue-500 mt-1">{{ brand.website }}</p>-->
+<!--                            </div>-->
+<!--                            <div class="flex gap-2">-->
+<!--                                <button-->
+<!--                                        class="text-indigo-600 hover:text-indigo-900 text-sm font-medium"-->
+<!--                                        (click)="editBrand(brand)"-->
+<!--                                >-->
+<!--                                    Edit-->
+<!--                                </button>-->
+<!--                                <button-->
+<!--                                        class="text-red-600 hover:text-red-900 text-sm font-medium"-->
+<!--                                        (click)="deleteBrand(brand.id!)"-->
+<!--                                >-->
+<!--                                    Delete-->
+<!--                                </button>-->
+<!--                            </div>-->
+<!--                        </div>-->
+<!--                        <div class="mt-3 flex flex-wrap gap-1">-->
+<!--                            <span *ngFor="let color of (brand.brandColor ? brand.brandColor.split(',') : [])"-->
+<!--                                  class="w-6 h-6 rounded-full inline-block"-->
+<!--                                  [style.backgroundColor]="color"-->
+<!--                                  [title]="color">-->
+<!--                            </span>-->
+<!--                        </div>-->
+<!--                        <div *ngIf="brand.brandLogo" class="mt-3">-->
+<!--                            <span class="text-xs text-gray-500">Logo: {{ brand.brandLogo }}</span>-->
+<!--                        </div>-->
+<!--                        <div *ngIf="brand.brandGuide" class="mt-1">-->
+<!--                            <span class="text-xs text-gray-500">Guidelines: {{ brand.brandGuide }}</span>-->
+<!--                        </div>-->
+<!--                        <div *ngIf="brand.brandFonts" class="mt-1">-->
+<!--                            <span class="text-xs text-gray-500">Fonts: {{ brand.brandFonts }}</span>-->
+<!--                        </div>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
+
+
+
+
+<div class="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
+    <p-toast position="top-right"></p-toast>
+
+    <div class="max-w-3xl mx-auto">
+        <!-- Header Section -->
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-gray-900">{{ isEditMode ? 'Update' : 'Create' }} Your Brand</h1>
+            <p class="mt-2 text-sm text-gray-600">
+                Define your brand identity by providing the necessary details below.
+            </p>
+        </div>
+
+        <!-- Loading Indicator -->
+        <div *ngIf="isLoading" class="mb-4 p-4 bg-blue-100 border-l-4 border-blue-500 text-blue-700 rounded">
+            <p>Processing your request...</p>
+        </div>
+
+        <!-- Brand Creation Form -->
+        <form class="space-y-6" (ngSubmit)="onSubmit()">
+            <!-- Brand Name -->
+            <div>
+                <label for="brand-name" class="block text-sm font-medium text-gray-700">Brand Name *</label>
+                <input
+                        type="text"
+                        id="brand-name"
+                        name="brand-name"
+                        placeholder="Enter your brand name"
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        [(ngModel)]="brand.industryName"
+                        required
+                />
+            </div>
+
+            <!-- Brand Description -->
+            <div>
+                <label for="brand-description" class="block text-sm font-medium text-gray-700">Brand Description *</label>
+                <textarea
+                        id="brand-description"
+                        name="brand-description"
+                        rows="3"
+                        placeholder="Describe your brand"
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        [(ngModel)]="brand.description"
+                        required
+                ></textarea>
+            </div>
+
+            <!-- Website -->
+            <div>
+                <label for="website" class="block text-sm font-medium text-gray-700">Website *</label>
+                <input
+                        type="text"
+                        id="website"
+                        name="website"
+                        placeholder="Enter your website URL"
+                        class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        [(ngModel)]="brand.website"
+                        required
+                />
+            </div>
+
+            <!-- Brand Colors -->
+            <div>
+                <label class="block text-sm font-medium text-gray-700">Brand Colors</label>
+                <!-- Color Palette -->
+                <div class="mt-2 flex flex-wrap gap-2">
+                    <!-- Predefined Colors -->
+                    <div
+                            *ngFor="let color of predefinedColors"
+                            class="w-8 h-8 rounded-full cursor-pointer border-2 border-transparent hover:border-gray-400"
+                            [style.backgroundColor]="color"
+                            (click)="selectColor(color)"
+                            [class.border-gray-400]="brand.brandColor && brand.brandColor.includes(color)"
+                    ></div>
+                </div>
+
+                <!-- Custom Color Picker -->
+                <div class="mt-4">
+                    <label for="custom-color" class="block text-sm font-medium text-gray-700">Add Custom Color</label>
+                    <input
+                            type="color"
+                            id="custom-color"
+                            name="custom-color"
+                            class="mt-1 block w-full h-10 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                            (change)="selectColor($any($event.target).value)"
+                    />
+                </div>
+
+                <!-- Selected Colors Display -->
+                <div class="mt-4">
+                    <label class="block text-sm font-medium text-gray-700">
+                        Selected Colors ({{brand.brandColor ? brand.brandColor.split(',').length : 0}})
+                    </label>
+                    <div class="mt-2 flex flex-wrap gap-2">
+                        <div
+                                *ngFor="let color of (brand.brandColor ? brand.brandColor.split(',') : [])"
+                                class="relative w-8 h-8 rounded-full"
+                                [style.backgroundColor]="color"
+                        >
+                            <button
+                                    class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs"
+                                    (click)="removeColor(color)"
+                            >
+                                ×
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reset All Colors Button -->
+                <div class="mt-4">
+                    <button
+                            type="button"
+                            class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 text-sm"
+                            (click)="resetColors()"
+                    >
+                        Reset All Colors
+                    </button>
+                </div>
+            </div>
+
+            <!-- Logo Upload -->
+            <div>
+                <label for="logo-upload" class="block text-sm font-medium text-gray-700">Logo Upload *</label>
+                <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                    <div class="space-y-1 text-center">
+                        <div class="flex text-sm text-gray-600">
+                            <label for="logo-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                <span>Upload a file</span>
+                                <input id="logo-upload" name="logo-upload" type="file" class="sr-only" (change)="onFileSelected($event, 'logo')" accept="image/*" />
+                            </label>
+                            <p class="pl-1">or drag and drop</p>
+                        </div>
+                        <p class="text-xs text-gray-500">PNG, JPG, GIF up to 10MB</p>
+                        <p *ngIf="brand.logo" class="text-xs text-green-500 mt-2">{{ brand.logo.name }}</p>
+                        <p *ngIf="brand.brandLogo && !brand.logo" class="text-xs text-green-500 mt-2">Current logo: {{ brand.brandLogo }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Brand Guidelines Upload -->
+            <div>
+                <label for="guidelines-upload" class="block text-sm font-medium text-gray-700">Brand Guidelines Upload</label>
+                <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                    <div class="space-y-1 text-center">
+                        <div class="flex text-sm text-gray-600">
+                            <label for="guidelines-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                <span>Upload a file</span>
+                                <input id="guidelines-upload" name="guidelines-upload" type="file" class="sr-only" (change)="onFileSelected($event, 'guidelines')" accept=".pdf,.doc,.docx" />
+                            </label>
+                            <p class="pl-1">or drag and drop</p>
+                        </div>
+                        <p class="text-xs text-gray-500">PDF, DOCX up to 10MB</p>
+                        <p *ngIf="brand.guidelines" class="text-xs text-green-500 mt-2">{{ brand.guidelines.name }}</p>
+                        <p *ngIf="brand.brandGuide && !brand.guidelines" class="text-xs text-green-500 mt-2">Current guidelines: {{ brand.brandGuide }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Fonts Upload -->
+            <div>
+                <label for="fonts-upload" class="block text-sm font-medium text-gray-700">Fonts Upload</label>
+                <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md">
+                    <div class="space-y-1 text-center">
+                        <div class="flex text-sm text-gray-600">
+                            <label for="fonts-upload" class="relative cursor-pointer bg-white rounded-md font-medium text-indigo-600 hover:text-indigo-500 focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-indigo-500">
+                                <span>Upload a file</span>
+                                <input id="fonts-upload" name="fonts-upload" type="file" class="sr-only" (change)="onFileSelected($event, 'fonts')" accept=".ttf,.otf" />
+                            </label>
+                            <p class="pl-1">or drag and drop</p>
+                        </div>
+                        <p class="text-xs text-gray-500">TTF, OTF up to 10MB</p>
+                        <p *ngIf="brand.fonts" class="text-xs text-green-500 mt-2">{{ brand.fonts.name }}</p>
+                        <p *ngIf="brand.brandFonts && !brand.fonts" class="text-xs text-green-500 mt-2">Current fonts: {{ brand.brandFonts }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Form Actions -->
+            <div class="flex justify-end gap-4 pt-4">
+                <button
+                        type="button"
+                        class="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-gray-500 text-sm"
+                        (click)="resetForm()"
+                        *ngIf="isEditMode"
+                >
+                    Cancel
+                </button>
+                <button
+                        type="submit"
+                        class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+                        [disabled]="isLoading"
+                >
+                    {{ isEditMode ? 'Update Brand' : 'Create Brand' }}
+                </button>
+            </div>
+        </form>
+
+        <!-- Brands List Section -->
+        <div class="mt-12">
+            <div class="bg-white p-6 rounded-lg shadow">
+                <h2 class="text-xl font-semibold text-gray-800 mb-4">Your Brands</h2>
+
+                <div *ngIf="brands.length === 0" class="text-center py-8 text-gray-500">
+                    No brands found. Create your first brand!
+                </div>
+
+                <div class="space-y-4">
+                    <div *ngFor="let brand of brands" class="border border-gray-200 rounded-lg p-4 hover:bg-gray-50">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="font-medium text-gray-900">{{ brand.industryName }}</h3>
+                                <p class="text-sm text-gray-500 mt-1">{{ brand.description }}</p>
+                                <p class="text-sm text-blue-500 mt-1">{{ brand.website }}</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <button
+                                        class="text-indigo-600 hover:text-indigo-900 text-sm font-medium"
+                                        (click)="editBrand(brand)"
+                                >
+                                    Edit
+                                </button>
+                                <button
+                                        class="text-red-600 hover:text-red-900 text-sm font-medium"
+                                        (click)="deleteBrand(brand.id!)"
+                                >
+                                    Delete
+                                </button>
+                            </div>
+                        </div>
+                        <div class="mt-3 flex flex-wrap gap-1">
+                            <span *ngFor="let color of (brand.brandColor ? brand.brandColor.split(',') : [])"
+                                  class="w-6 h-6 rounded-full inline-block"
+                                  [style.backgroundColor]="color"
+                                  [title]="color">
+                            </span>
+                        </div>
+                        <div *ngIf="brand.brandLogo" class="mt-3">
+                            <span class="text-xs text-gray-500">Logo: {{ brand.brandLogo }}</span>
+                        </div>
+                        <div *ngIf="brand.brandGuide" class="mt-1">
+                            <span class="text-xs text-gray-500">Guidelines: {{ brand.brandGuide }}</span>
+                        </div>
+                        <div *ngIf="brand.brandFonts" class="mt-1">
+                            <span class="text-xs text-gray-500">Fonts: {{ brand.brandFonts }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

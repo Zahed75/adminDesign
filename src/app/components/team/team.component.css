@@ -1,0 +1,23 @@
+/* Add custom styles for the table */
+.p-table {
+    width: 100%;
+    margin-top: 1rem;
+}
+
+/* Style for the user image */
+img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Style for the form */
+.p-field {
+    margin-bottom: 1rem;
+}
+
+/* Style for the dropdown */
+p-dropdown {
+    width: 100%;
+}
