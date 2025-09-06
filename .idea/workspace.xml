@@ -5,75 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="04539420-98e5-434f-8cc1-d03d89954d84" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/.tsbuildinfo" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/.tsbuildinfo" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/@angular_animations.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/@angular_animations.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/@angular_common.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/@angular_common.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/@angular_common_http.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/@angular_common_http.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/@angular_core.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/@angular_core.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/@angular_forms.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/@angular_forms.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/@angular_platform-browser.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/@angular_platform-browser.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/@angular_platform-browser_animations_async.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/@angular_platform-browser_animations_async.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/@angular_router.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/@angular_router.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/_metadata.json" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/_metadata.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/browser-IPKF3ZW3.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/browser-IPKF3ZW3.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-2YSJEV73.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-2YSJEV73.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-3D4FGWCN.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-3D4FGWCN.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-53W2EHZO.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-53W2EHZO.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-77H7EOQX.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-77H7EOQX.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-G7QUDAEI.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-G7QUDAEI.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-GQRMS6NA.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-GQRMS6NA.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-HWFIWH6L.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-HWFIWH6L.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-JNES73ON.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-JNES73ON.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-KEH2KR5X.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-KEH2KR5X.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-OD6LWCVW.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-OD6LWCVW.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-QGYKNBZZ.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-QGYKNBZZ.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-SQDI35WH.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-SQDI35WH.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-VAX3LMNE.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-VAX3LMNE.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-WG5MARZ6.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-WG5MARZ6.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-YXNYVPBM.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/chunk-YXNYVPBM.js.map" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_api.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_api.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_avatar.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_avatar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_badge.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_badge.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_button.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_button.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_card.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_card.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_chart.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_chart.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_config.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_confirmdialog.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_confirmdialog.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_dialog.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_dialog.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_dropdown.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_dropdown.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_editor.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_editor.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_fileupload.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_fileupload.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_inputtext.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_inputtext.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_inputtextarea.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_inputtextarea.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_menu.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_menu.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_multiselect.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_multiselect.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_progressspinner.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_progressspinner.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_ripple.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_ripple.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_selectbutton.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_selectbutton.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_styleclass.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_styleclass.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_table.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_table.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_tag.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_tag.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_toast.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_toast.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_tooltip.js" beforeDir="false" afterPath="$PROJECT_DIR$/.angular/cache/19.0.6/sakai-ng/vite/deps/primeng_tooltip.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -100,6 +32,7 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;dart.analysis.tool.window.visible&quot;: &quot;false&quot;,
@@ -139,7 +72,7 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-6a121458b545-JavaScript-WS-251.25410.117" />
+        <option value="bundled-js-predefined-d6986cc7102b-09060db00ec0-JavaScript-WS-251.28293.44" />
       </set>
     </attachedChunks>
   </component>
@@ -194,7 +127,9 @@
       <workItem from="1745243498302" duration="796000" />
       <workItem from="1745339230473" duration="4000" />
       <workItem from="1747563335083" duration="2509000" />
-      <workItem from="1754410110834" duration="2120000" />
+      <workItem from="1754410110834" duration="4714000" />
+      <workItem from="1757153267615" duration="631000" />
+      <workItem from="1757153949987" duration="1000" />
     </task>
     <servers />
   </component>

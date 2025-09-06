@@ -1,0 +1,17 @@
+# .nixpacks.toml
+
+[phases.setup]
+# Angular 20 needs Node >= 20.19 or 22.x
+nixPkgs = ["nodejs_22"]
+
+[phases.install]
+cmds = ["npm ci"]
+
+[phases.build]
+# Production build
+cmds = ["npm run build -- --configuration production"]
+
+# Serve as a static site using Nixpacks' static provider
+# IMPORTANT: this path must match your angular.json outputPath EXACTLY (case-sensitive)
+[static]
+root = "dist/landing-designPro"
