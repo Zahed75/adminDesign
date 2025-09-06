@@ -15,12 +15,12 @@ export class SignUpComponent {
   registerForm: FormGroup;
   isLoading = false;
   errorMessage: string | null = null;
-  showSuccessLoader = false; // New loader state
+  showSuccessLoader = false;
 
   constructor(
-      private fb: FormBuilder,
-      private authService: AuthService,
-      private router: Router
+    private fb: FormBuilder,
+    private authService: AuthService,
+    private router: Router
   ) {
     this.registerForm = this.fb.group({
       username: ['', [
@@ -30,11 +30,8 @@ export class SignUpComponent {
         Validators.pattern(/^[a-zA-Z0-9]+$/)
       ]],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [
-        Validators.required,
-        Validators.minLength(8),
-        Validators.pattern(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]+$/)
-      ]],
+      // ✅ Password: only required
+      password: ['', [Validators.required]],
       terms: [false, Validators.requiredTrue]
     });
   }
@@ -57,11 +54,10 @@ export class SignUpComponent {
       password,
       user_type: 'CUS'
     }).subscribe({
-      next: (res) => {
+      next: () => {
         this.isLoading = false;
         this.showSuccessLoader = true;
 
-        // Show success loader for 2 seconds before redirecting
         setTimeout(() => {
           this.router.navigate(['/otp-verification'], {
             state: { email: email, from: 'signup' }
@@ -71,7 +67,7 @@ export class SignUpComponent {
       error: (err) => {
         this.isLoading = false;
         this.showSuccessLoader = false;
-        this.errorMessage = err.error?.message || 'Registration failed. Please try again.';
+        this.errorMessage = err?.error?.message || 'Registration failed. Please try again.';
       }
     });
   }
