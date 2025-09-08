@@ -14,7 +14,8 @@ import { DesignerTaskComponent } from './app/components/designer-task/designer-t
 import { ChatSystemComponent } from './app/components/chat-system/chat-system.component';
 import { ServiceDetailsComponent } from './app/components/service-details/service-details.component';
 import { authGuard } from './guard/auth.guard';
-import {DesignerTaskDetailsComponent} from "./app/components/designer-task-details/designer-task-details.component";
+import { DesignerTaskDetailsComponent } from "./app/components/designer-task-details/designer-task-details.component";
+import { ProfileComponent } from './app/components/profile/profile.component';
 
 export const appRoutes: Routes = [
     {
@@ -87,6 +88,11 @@ export const appRoutes: Routes = [
                 path: 'designer/:id',
                 component: DesignerTaskDetailsComponent,
                 data: { roles: ['AD', 'DES'] },
+            },
+            {
+                path: 'profile',
+                component: ProfileComponent,
+               
             },
             {
                 path: 'pages',

@@ -1,0 +1,221 @@
+<p-toast position="top-right"></p-toast>
+<p-confirmDialog></p-confirmDialog>
+
+<div class="mx-auto max-w-6xl p-4 md:p-6 space-y-6">
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h1 class="text-2xl md:text-3xl font-semibold tracking-tight">Your Profile</h1>
+      <p class="text-sm text-muted-color">Manage your personal info and subscription.</p>
+    </div>
+
+    <button
+      pButton
+      type="button"
+      label="Billing Portal"
+      icon="pi pi-external-link"
+      class="p-button-outlined"
+      (click)="onManageBillingPortal()">
+    </button>
+  </div>
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- LEFT COLUMN: Profile -->
+    <div class="lg:col-span-2">
+      <p-card class="rounded-2xl shadow-sm">
+        <ng-template pTemplate="header">
+          <div class="flex items-center gap-3">
+            <p-avatar
+              [image]="user().avatarUrl || ('https://api.dicebear.com/9.x/initials/svg?seed=' + user().name)"
+              shape="circle"
+              size="large">
+            </p-avatar>
+            <div>
+              <div class="text-lg font-semibold">{{ user().name }}</div>
+              <div class="text-xs text-muted-color">{{ user().email }}</div>
+            </div>
+          </div>
+        </ng-template>
+
+        <form [formGroup]="profileForm" class="space-y-5">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="space-y-2">
+              <label class="text-sm font-medium">Full Name</label>
+              <input pInputText formControlName="name" placeholder="Your name" class="w-full" />
+              <small *ngIf="profileForm.get('name')?.touched && profileForm.get('name')?.invalid" class="text-xs text-red-500">
+                Please enter at least 2 characters.
+              </small>
+            </div>
+
+            <div class="space-y-2">
+              <label class="text-sm font-medium">Email</label>
+              <input pInputText formControlName="email" class="w-full" />
+              <small class="text-xs text-muted-color">Email changes usually require re-verification.</small>
+            </div>
+
+            <div class="space-y-2">
+              <label class="text-sm font-medium">Phone</label>
+              <input pInputText formControlName="phone" placeholder="+8801XXXXXXXXX" class="w-full" />
+            </div>
+
+            <div class="space-y-2">
+              <label class="text-sm font-medium">Timezone</label>
+              <p-dropdown formControlName="timezone" [options]="tzOptions" optionLabel="label" optionValue="value" class="w-full"></p-dropdown>
+            </div>
+
+            <div class="space-y-2">
+              <label class="text-sm font-medium">Language</label>
+              <p-dropdown formControlName="language" [options]="langOptions" optionLabel="label" optionValue="value" class="w-full"></p-dropdown>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-end gap-3 pt-2">
+            <button pButton type="button" label="Reset" class="p-button-text" (click)="profileForm.reset(user())"></button>
+            <button pButton type="button" label="Save changes" icon="pi pi-check" (click)="onSaveProfile()"></button>
+          </div>
+        </form>
+      </p-card>
+    </div>
+
+    <!-- RIGHT COLUMN: Subscription -->
+    <div class="space-y-6">
+      <p-card class="rounded-2xl shadow-sm">
+        <ng-template pTemplate="header">
+          <div class="flex items-center justify-between w-full">
+            <span class="text-lg font-semibold">Subscription</span>
+            <p-tag [severity]="statusSeverity()" [value]="subscription().status"></p-tag>
+          </div>
+        </ng-template>
+
+        <div class="space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="font-medium">{{ currentPlan().name }}</div>
+              <div class="text-xs text-muted-color">Renews on {{ subscription().renewsOn || '—' }}</div>
+            </div>
+            <div class="text-right">
+              <div class="font-semibold">{{ currency(currentPlan().priceMonthly) }}/mo</div>
+              <div class="text-xs text-muted-color">Monthly</div>
+            </div>
+          </div>
+
+          <div *ngIf="subscription().usage" class="space-y-2">
+            <div class="flex justify-between text-xs">
+              <span>Usage</span>
+              <span>{{ subscription().usage!.used | number }} / {{ subscription().usage!.quota | number }}</span>
+            </div>
+            <p-progressBar [value]="usagePct()"></p-progressBar>
+          </div>
+
+          <div class="flex items-center gap-2">
+            <button pButton type="button" class="w-full" icon="pi pi-pencil" label="Change plan" (click)="openChangePlan()"></button>
+          </div>
+
+          <p-divider></p-divider>
+
+          <div class="space-y-2">
+            <div class="text-sm text-muted-color">
+              {{ subscription().cancelAtPeriodEnd ? 'Cancellation scheduled at period end.' : 'Auto-renew is enabled.' }}
+            </div>
+
+            <div class="flex gap-2">
+              <button *ngIf="!subscription().cancelAtPeriodEnd"
+                      pButton type="button" class="p-button-danger p-button-outlined w-full"
+                      icon="pi pi-times" label="Cancel subscription"
+                      (click)="onCancelSubscription()"></button>
+
+              <button *ngIf="subscription().cancelAtPeriodEnd"
+                      pButton type="button" class="p-button-success p-button-outlined w-full"
+                      icon="pi pi-refresh" label="Resume subscription"
+                      (click)="onResumeSubscription()"></button>
+            </div>
+          </div>
+        </div>
+      </p-card>
+
+      <p-card class="rounded-2xl shadow-sm">
+        <ng-template pTemplate="header">
+          <span class="text-lg font-semibold">Billing History</span>
+        </ng-template>
+
+        <p-table [value]="invoices()" dataKey="date" responsiveLayout="scroll" class="text-sm">
+          <ng-template pTemplate="header">
+            <tr>
+              <th>Date</th>
+              <th>Description</th>
+              <th class="text-right">Amount</th>
+              <th>Status</th>
+              <th class="text-right">Invoice</th>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="body" let-row>
+            <tr>
+              <td>{{ row.date }}</td>
+              <td>{{ row.description }}</td>
+              <td class="text-right">{{ currency(row.amount) }}</td>
+              <td>
+                <p-tag
+                  [severity]="row.status === 'paid' ? 'success' : (row.status === 'open' ? 'warn' : 'danger')"
+                  [value]="row.status">
+                </p-tag>
+              </td>
+              <td class="text-right">
+                <a *ngIf="row.invoiceUrl" [href]="row.invoiceUrl" target="_blank" class="text-primary hover:underline">
+                  View
+                </a>
+                <span *ngIf="!row.invoiceUrl" class="text-muted-color">—</span>
+              </td>
+            </tr>
+          </ng-template>
+
+          <ng-template pTemplate="emptymessage">
+            <tr>
+              <td colspan="5" class="text-center text-muted-color py-6">No invoices found.</td>
+            </tr>
+          </ng-template>
+        </p-table>
+      </p-card>
+    </div>
+  </div>
+</div>
+
+<!-- Change Plan Dialog -->
+<p-dialog
+  header="Change Plan"
+  [visible]="changePlanVisible()"
+  (visibleChange)="changePlanVisible.set($event)"
+  [modal]="true"
+  [style]="{ width: '36rem' }"
+  [draggable]="false"
+  [resizable]="false"
+>
+  <div class="space-y-4">
+    <div class="grid grid-cols-1 gap-3">
+      <label class="text-sm font-medium">Select a plan</label>
+
+      <div class="space-y-3">
+        <div *ngFor="let p of plans" class="border rounded-xl p-4 flex items-start gap-4"
+             [ngClass]="{'ring-2 ring-primary': selectedPlanId() === p.id}">
+          <div class="pt-1">
+            <input type="radio" class="mt-1" [checked]="selectedPlanId() === p.id" (change)="selectedPlanId.set(p.id)" />
+          </div>
+          <div class="flex-1">
+            <div class="flex items-center justify-between">
+              <div class="font-semibold">{{ p.name }}</div>
+              <div class="text-sm">{{ currency(p.priceMonthly) }}/mo</div>
+            </div>
+            <ul class="mt-2 text-xs text-muted-color list-disc pl-5 space-y-1">
+              <li *ngFor="let f of p.features">{{ f }}</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex justify-end gap-2 pt-2">
+      <button pButton type="button" class="p-button-text" label="Close" (click)="changePlanVisible.set(false)"></button>
+      <button pButton type="button" icon="pi pi-check" label="Confirm change" (click)="onConfirmChangePlan()"></button>
+    </div>
+  </div>
+</p-dialog>

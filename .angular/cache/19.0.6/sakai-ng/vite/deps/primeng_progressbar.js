@@ -1,10 +1,9 @@
 import {
-  InputText,
-  InputTextClasses,
-  InputTextModule,
-  InputTextStyle
-} from "./chunk-JNIAXUHT.js";
-import "./chunk-OR5SMPRP.js";
+  ProgressBar,
+  ProgressBarClasses,
+  ProgressBarModule,
+  ProgressBarStyle
+} from "./chunk-I5ROI6EC.js";
 import "./chunk-KA5FT7DA.js";
 import "./chunk-2EFJOFZM.js";
 import "./chunk-GQ7XGR4U.js";
@@ -19,9 +18,9 @@ import "./chunk-TZIJKBMI.js";
 import "./chunk-YAPJLE7E.js";
 import "./chunk-4MWRP73S.js";
 export {
-  InputText,
-  InputTextClasses,
-  InputTextModule,
-  InputTextStyle
+  ProgressBar,
+  ProgressBarClasses,
+  ProgressBarModule,
+  ProgressBarStyle
 };
-//# sourceMappingURL=primeng_inputtext.js.map
+//# sourceMappingURL=primeng_progressbar.js.map
