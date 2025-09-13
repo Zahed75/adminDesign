@@ -6,10 +6,21 @@
 //
 
 
+
+
+
 // Development environment configuration
+
+// export const environment = {
+//   production: false,
+//   apiBaseUrl: 'http://127.0.0.1:8000', // Local development URL
+//   wsHost: '127.0.0.1:8000'
+// };
+
+
 
 export const environment = {
   production: false,
-  apiBaseUrl: 'http://127.0.0.1:8000', // Local development URL
-  wsHost: 'localhost:8000'
+  apiBaseUrl: 'https://api.designpro.qa', // Local development URL
+  wsHost: 'https://api.designpro.qa:8000'
 };

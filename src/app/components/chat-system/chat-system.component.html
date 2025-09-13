@@ -1,227 +1,258 @@
 <div class="flex h-screen bg-gray-100">
-    <!-- Sidebar -->
-    <div class="w-80 bg-white border-r border-gray-200 flex flex-col">
-        <!-- Header -->
-        <div class="p-4 border-b border-gray-200">
-            <h2 class="text-xl font-semibold text-gray-800">Messages</h2>
-            <div class="flex items-center mt-2">
-                <div class="w-3 h-3 rounded-full mr-2"
-                     [class.bg-green-500]="chatService.isConnected"
-                     [class.bg-red-500]="!chatService.isConnected"></div>
-                <span class="text-xs">{{ chatService.isConnected ? 'Connected' : 'Disconnected' }}</span>
-            </div>
-        </div>
-
-        <!-- Chat Rooms -->
-        <div class="flex-1 overflow-y-auto">
-            <div class="px-4 py-2">
-                <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Chat Rooms</h3>
-            </div>
-            <ul class="space-y-1 px-2">
-                <li *ngFor="let room of chatRooms"
-                    [class.bg-blue-50]="selectedRoom?.id === room.id"
-                    (click)="selectRoom(room)"
-                    class="flex items-center p-3 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
-                    <p-avatar [label]="getInitial(getParticipantName(room))"
-                              size="large"
-                              shape="circle"
-                              class="mr-3"
-                              [style]="{ 'background-color': '#3b82f6', 'color': '#ffffff' }"
-                              pTooltip="{{ getParticipantName(room) }}"
-                              tooltipPosition="right">
-                    </p-avatar>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-sm font-medium text-gray-900 truncate">
-                            {{ getParticipantName(room) }}
-                        </p>
-                        <p class="text-xs text-gray-500 truncate">
-                            {{ room.updated_at | date: 'short' }}
-                        </p>
-                    </div>
-                    <p-badge *ngIf="room.unread_count && room.unread_count > 0"
-                             [value]="room.unread_count"
-                             severity="danger"
-                             class="ml-2"></p-badge>
-                </li>
-            </ul>
-
-            <!-- Available Users -->
-            <div class="px-4 py-2 mt-4">
-                <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Available Users</h3>
-            </div>
-            <ul class="space-y-1 px-2">
-                <li *ngFor="let user of users"
-                    (click)="startNewChat(user)"
-                    [class.opacity-50]="isSending && selectedUserForNewChat === user.id"
-                    class="flex items-center p-3 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors">
-                    <p-avatar [label]="getInitial(user.name)"
-                              size="large"
-                              shape="circle"
-                              class="mr-3"
-                              [style]="{ 'background-color': '#10b981', 'color': '#ffffff' }"
-                              pTooltip="{{ user.name }}"
-                              tooltipPosition="right">
-                    </p-avatar>
-                    <div class="flex-1 min-w-0">
-                        <p class="text-sm font-medium text-gray-900 truncate">{{ user.name }}</p>
-                        <p class="text-xs text-gray-500 truncate">{{ user.user_type | uppercase }}</p>
-                    </div>
-                    <p-progressSpinner *ngIf="isSending && selectedUserForNewChat === user.id"
-                                       styleClass="w-6 h-6"
-                                       strokeWidth="6"></p-progressSpinner>
-                </li>
-            </ul>
-        </div>
+  <!-- Sidebar -->
+  <div class="w-80 bg-white border-r border-gray-200 flex flex-col">
+    <!-- Header -->
+    <div class="p-4 border-b border-gray-200">
+      <h2 class="text-xl font-semibold text-gray-800">Messages</h2>
+      <div class="flex items-center mt-2">
+        <div
+          class="w-3 h-3 rounded-full mr-2"
+          [class.bg-green-500]="chatService.isConnected"
+          [class.bg-red-500]="!chatService.isConnected"
+        ></div>
+        <span class="text-xs">{{ chatService.isConnected ? 'Connected' : 'Disconnected' }}</span>
+      </div>
     </div>
 
-    <!-- Chat Area -->
-    <div class="flex-1 flex flex-col">
-        <!-- Chat Header -->
-        <div *ngIf="selectedRoom" class="bg-white border-b border-gray-200 p-4 flex items-center">
-            <p-avatar [label]="getInitial(getParticipantName(selectedRoom))"
-                      size="large"
-                      shape="circle"
-                      class="mr-3"
-                      [style]="{ 'background-color': '#3b82f6', 'color': '#ffffff' }">
-            </p-avatar>
-            <div>
-                <h2 class="text-lg font-semibold text-gray-800">
-                    {{ getParticipantName(selectedRoom) }}
-                </h2>
-                <p class="text-xs text-gray-500">
-                    <span [class.text-green-500]="chatService.isConnected"
-                          [class.text-gray-500]="!chatService.isConnected">
-                        {{ chatService.isConnected ? 'Online' : 'Offline' }}
-                    </span>
-                </p>
-            </div>
-        </div>
+    <!-- Chat Rooms -->
+    <div class="flex-1 overflow-y-auto">
+      <div class="px-4 py-2">
+        <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Chat Rooms</h3>
+      </div>
+      <ul class="space-y-1 px-2">
+        <li
+          *ngFor="let room of chatRooms"
+          [class.bg-blue-50]="selectedRoom?.id === room.id"
+          (click)="selectRoom(room)"
+          class="flex items-center p-3 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors"
+        >
+          <p-avatar
+            [label]="getInitial(getParticipantName(room))"
+            size="large"
+            shape="circle"
+            class="mr-3"
+            [style]="{ 'background-color': '#3b82f6', 'color': '#ffffff' }"
+            pTooltip="{{ getParticipantName(room) }}"
+            tooltipPosition="right"
+          />
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-medium text-gray-900 truncate">
+              {{ getParticipantName(room) }}
+            </p>
+            <p class="text-xs text-gray-500 truncate">
+              {{ room.updated_at | date: 'short' }}
+            </p>
+          </div>
+          <p-badge
+            *ngIf="room.unread_count && room.unread_count > 0"
+            [value]="room.unread_count"
+            severity="danger"
+            class="ml-2"
+          ></p-badge>
+        </li>
+      </ul>
 
-        <!-- Messages -->
-        <div class="flex-1 overflow-y-auto bg-gray-50 p-4 chat-messages-container">
-            <div *ngIf="!selectedRoom" class="h-full flex items-center justify-center">
-                <div class="text-center">
-                    <svg class="mx-auto h-12 w-12 text-gray-400"
-                         fill="none"
-                         viewBox="0 0 24 24"
-                         stroke="currentColor">
-                        <path stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="1.5"
-                              d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                    </svg>
-                    <h3 class="mt-2 text-sm font-medium text-gray-900">No chat selected</h3>
-                    <p class="mt-1 text-sm text-gray-500">
-                        Select a chat from the sidebar to start messaging
-                    </p>
-                </div>
-            </div>
-
-            <div *ngIf="selectedRoom" class="space-y-4">
-                <!-- Date separator -->
-                <div *ngIf="messages.length > 0" class="text-center text-xs text-gray-500 my-4">
-                    {{ formatDate(messages[0].timestamp) }}
-                </div>
-
-                <div *ngFor="let message of messages"
-                     class="flex"
-                     [class.justify-end]="message.sender === getCurrentUserRole()"
-                     [class.justify-start]="message.sender !== getCurrentUserRole()">
-                    <div [class.bg-blue-500]="message.sender === getCurrentUserRole()"
-                         [class.text-white]="message.sender === getCurrentUserRole()"
-                         [class.bg-white]="message.sender !== getCurrentUserRole()"
-                         [class.text-gray-800]="message.sender !== getCurrentUserRole()"
-                         class="max-w-xs lg:max-w-md px-4 py-2 rounded-lg shadow-sm border border-gray-200">
-                        <p class="break-words">{{ getDisplayContent(message) }}</p>
-
-                        <!-- File Message -->
-                        <div *ngIf="message.content.includes('[File]')" class="mt-2">
-                            <div class="flex items-center p-2 bg-white bg-opacity-20 rounded">
-                                <svg class="h-5 w-5 mr-2"
-                                     fill="none"
-                                     viewBox="0 0 24 24"
-                                     stroke="currentColor">
-                                    <path stroke-linecap="round"
-                                          stroke-linejoin="round"
-                                          stroke-width="2"
-                                          d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                                </svg>
-                                <a href="#"
-                                   (click)="downloadFile(message); $event.preventDefault()"
-                                   class="text-sm underline">
-                                    {{ message.content.split('[File] ')[1] }}
-                                </a>
-                            </div>
-                        </div>
-
-                        <!-- Voice Message -->
-                        <div *ngIf="message.content.includes('[Voice]')" class="mt-2">
-                            <audio controls class="w-full">
-                                <source [src]="getAudioSrc(message)" type="audio/webm" />
-                                Your browser does not support the audio element.
-                            </audio>
-                        </div>
-
-                        <div class="flex justify-end mt-1">
-                            <span class="text-xs opacity-80">
-                                {{ formatTime(message.timestamp) }}
-                                <span *ngIf="message.sender === getCurrentUserRole()">
-                                    <span *ngIf="message.is_read" class="ml-1 text-blue-300">✓✓</span>
-                                    <span *ngIf="!message.is_read" class="ml-1">✓</span>
-                                </span>
-                            </span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Message Input -->
-        <div *ngIf="selectedRoom" class="bg-white border-t border-gray-200 p-4">
-            <div class="flex items-center space-x-2">
-                <button pButton
-                        icon="pi pi-paperclip"
-                        class="p-button-rounded p-button-text"
-                        (click)="fileInput.click()"
-                        pTooltip="Attach file"
-                        tooltipPosition="top"
-                        [disabled]="!chatService.isConnected || isSending"></button>
-                <input #fileInput type="file" hidden (change)="onFileSelected($event)" />
-
-                <button pButton
-                        [icon]="isRecording ? 'pi pi-stop-circle' : 'pi pi-microphone'"
-                        class="p-button-rounded p-button-text"
-                        (click)="toggleVoiceRecording()"
-                        [pTooltip]="isRecording ? 'Stop recording' : 'Record voice message'"
-                        tooltipPosition="top"
-                        [disabled]="!chatService.isConnected || isSending"
-                        [class.text-red-500]="isRecording"></button>
-
-                <div class="flex-1 relative">
-                    <textarea #messageInput
-                              pInputTextarea
-                              [(ngModel)]="newMessage"
-                              placeholder="Type a message..."
-                              rows="1"
-                              (keydown)="sendMessage($event)"
-                              (focus)="onMessageInputFocus(true)"
-                              (blur)="onMessageInputFocus(false)"
-                              [disabled]="!chatService.isConnected || isSending"
-                              class="w-full border border-gray-300 rounded-full py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
-                              style="min-height: 40px; max-height: 120px;"></textarea>
-                </div>
-
-                <button pButton
-                        icon="pi pi-send"
-                        class="p-button-rounded p-button-text"
-                        (click)="sendButtonClick()"
-                        pTooltip="Send message"
-                        tooltipPosition="top"
-                        [disabled]="(!newMessage.trim() && !selectedFile && !audioBlob) || !chatService.isConnected || isSending"
-                        [class.hidden]="!messageInputFocused && !newMessage.trim()"></button>
-            </div>
-        </div>
+      <!-- Available Users -->
+      <div class="px-4 py-2 mt-4">
+        <h3 class="text-sm font-medium text-gray-500 uppercase tracking-wider">Available Users</h3>
+      </div>
+      <ul class="space-y-1 px-2">
+        <li
+          *ngFor="let user of users"
+          (click)="startNewChat(user)"
+          [class.opacity-50]="isSending && selectedUserForNewChat === user.id"
+          class="flex items-center p-3 rounded-lg cursor-pointer hover:bg-gray-100 transition-colors"
+        >
+          <p-avatar
+            [label]="getInitial(coalesceName(user))"
+            size="large"
+            shape="circle"
+            class="mr-3"
+            [style]="{ 'background-color': '#10b981', 'color': '#ffffff' }"
+            pTooltip="{{ coalesceName(user) }}"
+            tooltipPosition="right"
+          />
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-medium text-gray-900 truncate">{{ coalesceName(user) }}</p>
+            <p class="text-xs text-gray-500 truncate">{{ user.user_type | uppercase }}</p>
+          </div>
+          <p-progressSpinner
+            *ngIf="isSending && selectedUserForNewChat === user.id"
+            styleClass="w-6 h-6"
+            strokeWidth="6"
+          ></p-progressSpinner>
+        </li>
+      </ul>
     </div>
+  </div>
+
+  <!-- Chat Area -->
+  <div class="flex-1 flex flex-col">
+    <!-- Chat Header -->
+    <div *ngIf="selectedRoom" class="bg-white border-b border-gray-200 p-4 flex items-center">
+      <p-avatar
+        [label]="getInitial(getParticipantName(selectedRoom))"
+        size="large"
+        shape="circle"
+        class="mr-3"
+        [style]="{ 'background-color': '#3b82f6', 'color': '#ffffff' }"
+      />
+      <div>
+        <h2 class="text-lg font-semibold text-gray-800">
+          {{ getParticipantName(selectedRoom) }}
+        </h2>
+        <p class="text-xs text-gray-500">
+          <span
+            [class.text-green-500]="chatService.isConnected"
+            [class.text-gray-500]="!chatService.isConnected"
+          >
+            {{ chatService.isConnected ? 'Online' : 'Offline' }}
+          </span>
+        </p>
+      </div>
+    </div>
+
+    <!-- Messages -->
+    <div class="flex-1 overflow-y-auto bg-gray-50 p-4 chat-messages-container">
+      <div *ngIf="!selectedRoom" class="h-full flex items-center justify-center">
+        <div class="text-center">
+          <svg
+            class="mx-auto h-12 w-12 text-gray-400"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="1.5"
+              d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+            ></path>
+          </svg>
+          <h3 class="mt-2 text-sm font-medium text-gray-900">No chat selected</h3>
+          <p class="mt-1 text-sm text-gray-500">
+            Select a chat from the sidebar to start messaging
+          </p>
+        </div>
+      </div>
+
+      <div *ngIf="selectedRoom" class="space-y-4">
+        <!-- Date separator -->
+        <div *ngIf="messages.length > 0" class="text-center text-xs text-gray-500 my-4">
+          {{ formatDate(messages[0].timestamp) }}
+        </div>
+
+        <div
+          *ngFor="let message of messages"
+          class="flex"
+          [class.justify-end]="message.sender === getCurrentUserRole()"
+          [class.justify-start]="message.sender !== getCurrentUserRole()"
+        >
+          <div
+            [class.bg-blue-500]="message.sender === getCurrentUserRole()"
+            [class.text-white]="message.sender === getCurrentUserRole()"
+            [class.bg-white]="message.sender !== getCurrentUserRole()"
+            [class.text-gray-800]="message.sender !== getCurrentUserRole()"
+            class="max-w-xs lg:max-w-md px-4 py-2 rounded-lg shadow-sm border border-gray-200"
+          >
+            <p class="break-words">{{ getDisplayContent(message) }}</p>
+
+            <!-- File Message -->
+            <div *ngIf="message.content.includes('[File]')" class="mt-2">
+              <div class="flex items-center p-2 bg-white bg-opacity-20 rounded">
+                <svg class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                  ></path>
+                </svg>
+                <a
+                  href="#"
+                  (click)="downloadFile(message); $event.preventDefault()"
+                  class="text-sm underline"
+                >
+                  {{ message.content.split('[File] ')[1] }}
+                </a>
+              </div>
+            </div>
+
+            <!-- Voice Message -->
+            <div *ngIf="message.content.includes('[Voice]')" class="mt-2">
+              <audio controls class="w-full">
+                <source [src]="getAudioSrc(message)" type="audio/webm" />
+                Your browser does not support the audio element.
+              </audio>
+            </div>
+
+            <div class="flex justify-end mt-1">
+              <span class="text-xs opacity-80">
+                {{ formatTime(message.timestamp) }}
+                <span *ngIf="message.sender === getCurrentUserRole()">
+                  <span *ngIf="message.is_read" class="ml-1 text-blue-300">✓✓</span>
+                  <span *ngIf="!message.is_read" class="ml-1">✓</span>
+                </span>
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Message Input -->
+    <div *ngIf="selectedRoom" class="bg-white border-t border-gray-200 p-4">
+      <div class="flex items-center space-x-2">
+        <button
+          pButton
+          icon="pi pi-paperclip"
+          class="p-button-rounded p-button-text"
+          (click)="fileInput.click()"
+          pTooltip="Attach file"
+          tooltipPosition="top"
+          [disabled]="!chatService.isConnected || isSending"
+        ></button>
+        <input #fileInput type="file" hidden (change)="onFileSelected($event)" />
+
+        <button
+          pButton
+          [icon]="isRecording ? 'pi pi-stop-circle' : 'pi pi-microphone'"
+          class="p-button-rounded p-button-text"
+          (click)="toggleVoiceRecording()"
+          [pTooltip]="isRecording ? 'Stop recording' : 'Record voice message'"
+          tooltipPosition="top"
+          [disabled]="!chatService.isConnected || isSending"
+          [class.text-red-500]="isRecording"
+        ></button>
+
+        <div class="flex-1 relative">
+          <textarea
+            #messageInput
+            [(ngModel)]="newMessage"
+            placeholder="Type a message..."
+            rows="1"
+            (keydown)="sendMessage($event)"
+            (focus)="onMessageInputFocus(true)"
+            (blur)="onMessageInputFocus(false)"
+            [disabled]="!chatService.isConnected || isSending"
+            class="w-full border border-gray-300 rounded-full py-3 px-4 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+            style="min-height: 40px; max-height: 120px;"
+          ></textarea>
+        </div>
+
+        <button
+          pButton
+          icon="pi pi-send"
+          class="p-button-rounded p-button-text"
+          (click)="sendButtonClick()"
+          pTooltip="Send message"
+          tooltipPosition="top"
+          [disabled]="(!newMessage.trim() && !selectedFile && !audioBlob) || !chatService.isConnected || isSending"
+          [class.hidden]="!messageInputFocused && !newMessage.trim()"
+        ></button>
+      </div>
+    </div>
+  </div>
 </div>
 
 <p-toast position="top-right"></p-toast>
