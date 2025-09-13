@@ -16,18 +16,26 @@ export class OtpVerificationComponent {
   email: string = '';
   isLoading = false;
   errorMessage: string | null = null;
+
+  // resend state
   isResending = false;
-  countdown = 30;
+  countdown = 30;                // cooldown seconds
   countdownInterval: any;
 
   constructor(
-      private authService: AuthService,
-      private router: Router,
-      private route: ActivatedRoute
+    private authService: AuthService,
+    private router: Router,
+    private route: ActivatedRoute
   ) {
-    // Get email from route state
-    const navigation = this.router.getCurrentNavigation();
-    this.email = navigation?.extras.state?.['email'] || 'your@email.com';
+    // Resolve email from multiple sources (state -> localStorage -> query param)
+    const navEmail = this.router.getCurrentNavigation()?.extras.state?.['email'];
+    const lsEmail  = localStorage.getItem('reset_email');
+    const qpEmail  = this.route.snapshot.queryParamMap.get('email');
+
+    this.email = (navEmail || lsEmail || qpEmail || '').trim();
+    if (this.email) {
+      localStorage.setItem('reset_email', this.email); // ensure it's available for reset-password step
+    }
 
     // Start countdown timer
     this.startCountdown();
@@ -60,37 +68,48 @@ export class OtpVerificationComponent {
     this.isLoading = true;
     this.errorMessage = null;
 
-    this.authService.verifyOTP({
-      email: this.email,
-      otp: otpCode
-    }).subscribe({
+    this.authService.verifyOTP({ email: this.email, otp: otpCode }).subscribe({
       next: (res) => {
         this.isLoading = false;
-        // Store tokens if available
-        if (res.access_token) {
+
+        // (Optional) store tokens if your backend returns them
+        if (res?.access_token) {
           localStorage.setItem('accessToken', res.access_token);
           localStorage.setItem('refreshToken', res.refresh_token);
           localStorage.setItem('userId', res.user_id?.toString() || '');
           localStorage.setItem('role', res.role || 'CUS');
         }
-        this.router.navigate(['/app/dashboard']);
+
+        // Navigate to reset password after verified
+        this.router.navigate(['/reset-password']);
       },
       error: (err) => {
         this.isLoading = false;
-        this.errorMessage = err.error?.message || 'Invalid verification code. Please try again.';
+        this.errorMessage = err?.error?.message || 'Invalid verification code. Please try again.';
       }
     });
   }
 
+  // ============= RESEND (uses forgot-password request API) =============
   resendOTP() {
+    if (!this.email) {
+      this.errorMessage = 'Missing email. Please go back and start from Forgot Password.';
+      return;
+    }
+    if (this.countdown > 0 || this.isResending) return;
+
     this.isResending = true;
-    this.authService.resendOTP(this.email).subscribe({
+    this.errorMessage = null;
+
+    // 🔗 Use the same endpoint as the Forgot Password page
+    this.authService.requestPasswordReset(this.email).subscribe({
       next: () => {
         this.isResending = false;
-        this.countdown = 30;
+        // restart cooldown
+        this.countdown = 30;      // keep same value as top (or change to 60 if you prefer)
         this.startCountdown();
       },
-      error: (err) => {
+      error: () => {
         this.isResending = false;
         this.errorMessage = 'Failed to resend OTP. Please try again.';
       }

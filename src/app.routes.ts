@@ -16,6 +16,7 @@ import { ServiceDetailsComponent } from './app/components/service-details/servic
 import { authGuard } from './guard/auth.guard';
 import { DesignerTaskDetailsComponent } from "./app/components/designer-task-details/designer-task-details.component";
 import { ProfileComponent } from './app/components/profile/profile.component';
+import { ResetPasswordComponent } from './app/components/reset-password/reset-password.component';
 
 export const appRoutes: Routes = [
     {
@@ -35,6 +36,11 @@ export const appRoutes: Routes = [
         path: 'otp-verification',
         component: OtpVerificationComponent,
     },
+     {
+        path: 'reset-password',
+        component: ResetPasswordComponent,
+    },
+
     {
         path: 'forgot-password',
         component: ForgetPassComponent,

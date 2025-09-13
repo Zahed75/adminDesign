@@ -131,8 +131,7 @@ signIn(loginData: { email: string; password: string }): Observable<any> {
   }
 
    // Add this method to get current user email
-// In auth.service.ts - FIXED getCurrentUserEmail METHOD
-// In auth.service.ts - FIX THE getCurrentUserEmail METHOD
+
 getCurrentUserEmail(): string | null {
   console.log('🔍 Getting user email from localStorage...');
   
@@ -163,4 +162,20 @@ getCurrentUserEmail(): string | null {
     return null;
   }
 }
+
+
+
+
+// auth-service.ts (append inside AuthService class)
+
+requestPasswordReset(email: string) {
+  return this.http.post(`${this.baseURL}/api/forgot-password/request/`, { email });
+}
+
+resetPasswordByEmail(payload: { email: string; new_password: string; confirm_password?: string }) {
+  return this.http.post(`${this.baseURL}/api/password/reset-by-email/`, payload);
+}
+
+
+
 }

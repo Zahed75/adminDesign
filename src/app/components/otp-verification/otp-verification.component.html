@@ -49,19 +49,20 @@
             </button>
 
             <!-- Resend OTP -->
-            <div class="text-center mt-6">
-                <p class="text-gray-400">
-                    Didn't receive the code?
-                    <button
-                            (click)="resendOTP()"
-                            [disabled]="countdown > 0 || isResending"
-                            class="text-red-400 hover:underline ml-1 disabled:opacity-50">
-                        <span *ngIf="!isResending">Resend</span>
-                        <span *ngIf="isResending">Sending...</span>
-                        <span *ngIf="countdown > 0"> ({{countdown}}s)</span>
-                    </button>
-                </p>
-            </div>
+         <div class="text-center mt-6">
+  <p class="text-gray-400">
+    Didn't receive the code?
+    <button
+      (click)="resendOTP()"
+      [disabled]="countdown > 0 || isResending"
+      class="text-red-400 hover:underline ml-1 disabled:opacity-50">
+      <span *ngIf="!isResending">Resend</span>
+      <span *ngIf="isResending">Sending...</span>
+      <span *ngIf="countdown > 0"> ({{countdown}}s)</span>
+    </button>
+  </p>
+</div>
+
         </div>
     </div>
 </div>
