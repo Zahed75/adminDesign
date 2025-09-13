@@ -186,21 +186,24 @@ export class ProfileComponent implements OnInit {
         return 'secondary';
     }
   });
-// In profile.component.ts - ADD TEMPORARY FIX
-// In profile.component.ts - ADD DIRECT FIX
+
+// In profile.component.ts - FIX THE ERROR
 ngOnInit(): void {
   console.log('🔄 ProfileComponent initialized');
   
-  // Check localStorage contents
-  console.log('📦 LocalStorage contents:');
-  console.log('   - token:', localStorage.getItem('token'));
-  console.log('   - user:', localStorage.getItem('user'));
-  
-  // DIRECT FIX: Ensure email is available
-  this.ensureEmailAvailable();
-  
-  this.initializeForm();
-  this.loadData();
+  // Use setTimeout to avoid ExpressionChangedAfterItHasBeenCheckedError
+  setTimeout(() => {
+    // Check localStorage contents
+    console.log('📦 LocalStorage contents:');
+    console.log('   - token:', localStorage.getItem('token'));
+    console.log('   - user:', localStorage.getItem('user'));
+    
+    // DIRECT FIX: Ensure email is available
+    this.ensureEmailAvailable();
+    
+    this.initializeForm();
+    this.loadData();
+  });
 }
 
 private ensureEmailAvailable(): void {
