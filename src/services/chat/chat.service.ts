@@ -55,13 +55,19 @@ export class ChatService {
 
   constructor(private http: HttpClient) {}
 
-  private getHeaders(): HttpHeaders {
+  // In chat.service.ts
+private getHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
+    const userData = localStorage.getItem('user');
+    
+    console.log('🔐 Token being used:', token);
+    console.log('👤 User data from localStorage:', userData);
+    
     return new HttpHeaders({
-      Authorization: `Bearer ${token || ''}`,
-      'Content-Type': 'application/json',
+        Authorization: `Bearer ${token || ''}`,
+        'Content-Type': 'application/json',
     });
-  }
+}
 
   getChatRooms(): Observable<ChatRoom[]> {
     return this.http
@@ -72,30 +78,34 @@ export class ChatService {
   }
 
   getMessages(roomId: number): Observable<Message[]> {
+    const url = `${this.apiUrl}/chat-messages/${roomId}/`;
     return this.http
-        .get<Message[]>(`${this.apiUrl}/chat-messages/${roomId}/`, {
-          headers: this.getHeaders(),
+        .get<Message[]>(url, {
+            headers: this.getHeaders(),
         })
         .pipe(catchError(this.handleError));
-  }
+}
 
-  sendMessage(
-      roomId: number,
-      content: string,
-      fileUrl?: string,
-      audioUrl?: string
-  ): Observable<Message> {
+
+sendMessage(
+    roomId: number,
+    content: string,
+    fileUrl?: string,
+    audioUrl?: string
+): Observable<Message> {
     const payload: any = { content };
     if (fileUrl) payload.file_url = fileUrl;
     if (audioUrl) payload.audio_url = audioUrl;
+    
+    // Ensure the URL has proper formatting
+    const url = `${this.apiUrl}/send-message/${roomId}/`;
+    
     return this.http
-        .post<Message>(
-            `${this.apiUrl}/send-message/${roomId}/`,
-            payload,
-            { headers: this.getHeaders() }
-        )
+        .post<Message>(url, payload, { 
+            headers: this.getHeaders() 
+        })
         .pipe(catchError(this.handleError));
-  }
+}
 
   getAllUsers(): Observable<User[]> {
     return this.http
@@ -186,14 +196,20 @@ export class ChatService {
     this.listeners.push(callback);
   }
 
-  private handleError(error: any): Observable<never> {
+ private handleError(error: any): Observable<never> {
     console.error('Chat Service Error:', error);
     let errorMessage = 'An error occurred';
+    
     if (error.status === 404) {
-      errorMessage = 'Resource not found';
+        errorMessage = 'Chat room not found. Please refresh and try again.';
+    } else if (error.status === 403) {
+        errorMessage = 'Access denied to this chat room.';
     } else if (error.error && error.error.detail) {
-      errorMessage = error.error.detail;
+        errorMessage = error.error.detail;
+    } else if (error.error && error.error.error) {
+        errorMessage = error.error.error;
     }
+    
     return throwError(() => new Error(errorMessage));
-  }
+}
 }

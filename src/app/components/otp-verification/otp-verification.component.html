@@ -1,12 +1,15 @@
 <div class="min-h-screen flex flex-col lg:flex-row">
     <!-- Left Section (Red Background with Image) -->
-    <div class="w-full lg:w-1/2 relative flex items-center justify-center p-10 bg-gradient-to-r from-red-600 via-red-700 to-red-800">
-        <img src="/assets/images/auth/auth-screens.png" alt="Auth Screen" class="relative z-10 max-w-full h-auto rounded-lg shadow-2xl" />
+    <div
+        class="w-full lg:w-1/2 relative flex items-center justify-center p-10 bg-gradient-to-r from-red-600 via-red-700 to-red-800">
+        <img src="/assets/images/auth/auth-screens.png" alt="Auth Screen"
+            class="relative z-10 max-w-full h-auto rounded-lg shadow-2xl" />
         <div class="absolute inset-0 flex items-center justify-center p-6 bg-black bg-opacity-50">
             <div class="text-center">
                 <h1 class="text-4xl lg:text-5xl font-bold text-white mb-6">"Fast, Efficient and Productive"</h1>
                 <p class="text-lg lg:text-xl text-gray-300">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
+                    et dolore magna aliqua.
                 </p>
             </div>
         </div>
@@ -27,41 +30,30 @@
 
             <!-- OTP Input Fields -->
             <div class="flex justify-center gap-4 mb-8">
-                <input
-                        *ngFor="let _ of [0,1,2,3]; let i = index"
-                        type="text"
-                        maxlength="1"
-                        [(ngModel)]="otp[i]"
-                        (keyup)="onOtpChange(i, $event)"
-                        id="otp-{{i}}"
-                        [disabled]="isLoading"
-                        class="w-16 h-16 text-center text-2xl font-bold bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500"
-                />
+                <input *ngFor="let _ of [0,1,2,3]; let i = index" type="text" maxlength="1" [(ngModel)]="otp[i]"
+                    (keyup)="onOtpChange(i, $event)" id="otp-{{i}}" [disabled]="isLoading"
+                    class="w-16 h-16 text-center text-2xl font-bold bg-gray-700 text-white border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-red-500" />
             </div>
 
             <!-- Submit Button -->
-            <button
-                    (click)="onSubmit()"
-                    [disabled]="isLoading || otp.join('').length !== 4"
-                    class="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+            <button (click)="onSubmit()" [disabled]="isLoading || otp.join('').length !== 4"
+                class="w-full bg-red-600 text-white py-3 rounded-lg hover:bg-red-700 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
                 <span *ngIf="!isLoading">Submit</span>
                 <span *ngIf="isLoading">Verifying...</span>
             </button>
 
             <!-- Resend OTP -->
-         <div class="text-center mt-6">
-  <p class="text-gray-400">
-    Didn't receive the code?
-    <button
-      (click)="resendOTP()"
-      [disabled]="countdown > 0 || isResending"
-      class="text-red-400 hover:underline ml-1 disabled:opacity-50">
-      <span *ngIf="!isResending">Resend</span>
-      <span *ngIf="isResending">Sending...</span>
-      <span *ngIf="countdown > 0"> ({{countdown}}s)</span>
-    </button>
-  </p>
-</div>
+            <div class="text-center mt-6">
+                <p class="text-gray-400">
+                    Didn't receive the code?
+                    <button (click)="resendOTP()" [disabled]="countdown > 0 || isResending"
+                        class="text-red-400 hover:underline ml-1 disabled:opacity-50">
+                        <span *ngIf="!isResending">Resend</span>
+                        <span *ngIf="isResending">Sending...</span>
+                        <span *ngIf="countdown > 0"> ({{countdown}}s)</span>
+                    </button>
+                </p>
+            </div>
 
         </div>
     </div>
