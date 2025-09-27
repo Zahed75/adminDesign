@@ -58,6 +58,9 @@ interface ChatRoom {
   // Defensive for PrimeNG custom elements like <p-avatar />
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
+
+
+
 export class ChatSystemComponent implements OnInit, OnDestroy {
   // ===== State =====
   chatRooms: ChatRoom[] = [];
@@ -141,11 +144,11 @@ loadChatRooms(): void {
                 this.chatRooms = [];
                 this.selectedRoom = null;
                 this.messages = [];
-                this.showError('No chat rooms found. The server might be returning the wrong user data.');
+                this.showError('No chat rooms found.');
                 return;
             }
             
-            // Normalize rooms first
+            // Normalize rooms with better debugging
             this.chatRooms = rooms.map((room: any) => {
                 const customer = this.normalizeUser(room.customer);
                 const designer = this.normalizeUser(room.designer);
@@ -159,23 +162,20 @@ loadChatRooms(): void {
                     updated_at: room.updated_at || new Date().toISOString(),
                 } as ChatRoom;
                 
-                console.log(`   Room ${normalizedRoom.id}: Customer ${customer.id}, Designer ${designer.id}`);
+                console.log(`   Room ${normalizedRoom.id}: Customer ${customer.id} (${customer.email}), Designer ${designer.id} (${designer.email})`);
                 return normalizedRoom;
             });
 
-            console.log('🎯 All normalized chat rooms:', this.chatRooms);
-            
             // Filter rooms to only include those where current user is a participant
             const userRooms = this.chatRooms.filter(room => {
                 const isParticipant = room.customer.id === this.currentUser?.id || 
                                     room.designer.id === this.currentUser?.id;
-                console.log(`   Room ${room.id} - User participant: ${isParticipant}`);
+                console.log(`   Room ${room.id} - User ${this.currentUser?.id} participant: ${isParticipant}`);
                 return isParticipant;
             });
             
-            console.log('✅ Rooms user has access to:', userRooms);
+            console.log('✅ Rooms user has access to:', userRooms.map(r => r.id));
             
-            // Only auto-select if there are rooms the user actually has access to
             if (userRooms.length > 0) {
                 if (!this.selectedRoom || !this.userRoomsIncludes(this.selectedRoom, userRooms)) {
                     this.selectRoom(userRooms[0]);
@@ -237,16 +237,19 @@ selectRoom(room: ChatRoom | null): void {
 
     console.log('Selecting room:', room.id, 'for user:', this.currentUser?.id);
     
-    // Double-check that the current user is a participant in this room
-    const isParticipant = room.customer.id === this.currentUser?.id || 
-                         room.designer.id === this.currentUser?.id;
+    // Improved participant detection - compare IDs properly
+    const isParticipant = room.customer?.id === this.currentUser?.id || 
+                         room.designer?.id === this.currentUser?.id;
+    
+    console.log('Participant check:', {
+        roomCustomerId: room.customer?.id,
+        roomDesignerId: room.designer?.id,
+        currentUserId: this.currentUser?.id,
+        isParticipant: isParticipant
+    });
     
     if (!isParticipant) {
-        console.error('User not authorized for this room. Room participants:', {
-            customer: room.customer.id,
-            designer: room.designer.id,
-            currentUser: this.currentUser?.id
-        });
+        console.error('User not authorized for this room');
         this.showError('You do not have access to this chat room');
         return;
     }
