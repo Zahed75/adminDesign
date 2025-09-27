@@ -22,5 +22,5 @@
 export const environment = {
   production: false,
   apiBaseUrl: 'https://api.designpro.qa', // Local development URL
-  wsHost: 'https://api.designpro.qa:8000'
+  wsHost: 'https://api.designpro.qa'
 };
