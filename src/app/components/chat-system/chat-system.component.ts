@@ -93,7 +93,7 @@ export class ChatSystemComponent implements OnInit, OnDestroy {
     public chatService: ChatService,
     private sanitizer: DomSanitizer,
     private messageService: MessageService
-  ) {}
+  ) { }
 
   // ===== Lifecycle =====
 
@@ -125,80 +125,80 @@ export class ChatSystemComponent implements OnInit, OnDestroy {
 
 
 
-// In chat-system.component.ts
+  // In chat-system.component.ts
 
-loadChatRooms(): void {
+  loadChatRooms(): void {
     if (!this.currentUser) {
-        this.showError('User not logged in');
-        return;
+      this.showError('User not logged in');
+      return;
     }
-    
-    console.log('🔄 Loading chat rooms for user:', this.currentUser.id, this.currentUser.email);
-    
-    const sub = this.chatService.getChatRooms().subscribe({
-        next: (rooms: any[]) => {
-            console.log('📦 Raw chat rooms received:', rooms);
-            
-            if (rooms.length === 0) {
-                console.log('❌ Backend returned empty rooms array');
-                this.chatRooms = [];
-                this.selectedRoom = null;
-                this.messages = [];
-                this.showError('No chat rooms found.');
-                return;
-            }
-            
-            // Normalize rooms with better debugging
-            this.chatRooms = rooms.map((room: any) => {
-                const customer = this.normalizeUser(room.customer);
-                const designer = this.normalizeUser(room.designer);
-                
-                const normalizedRoom = {
-                    ...room,
-                    customer,
-                    designer,
-                    unread_count: room.unread_count || 0,
-                    created_at: room.created_at || new Date().toISOString(),
-                    updated_at: room.updated_at || new Date().toISOString(),
-                } as ChatRoom;
-                
-                console.log(`   Room ${normalizedRoom.id}: Customer ${customer.id} (${customer.email}), Designer ${designer.id} (${designer.email})`);
-                return normalizedRoom;
-            });
 
-            // Filter rooms to only include those where current user is a participant
-            const userRooms = this.chatRooms.filter(room => {
-                const isParticipant = room.customer.id === this.currentUser?.id || 
-                                    room.designer.id === this.currentUser?.id;
-                console.log(`   Room ${room.id} - User ${this.currentUser?.id} participant: ${isParticipant}`);
-                return isParticipant;
-            });
-            
-            console.log('✅ Rooms user has access to:', userRooms.map(r => r.id));
-            
-            if (userRooms.length > 0) {
-                if (!this.selectedRoom || !this.userRoomsIncludes(this.selectedRoom, userRooms)) {
-                    this.selectRoom(userRooms[0]);
-                }
-            } else {
-                this.selectedRoom = null;
-                this.messages = [];
-                console.log('❌ No accessible chat rooms for user');
-                this.showError('No accessible chat rooms found. Please start a new chat.');
-            }
-        },
-        error: (error) => {
-            console.error('❌ Error loading chat rooms:', error);
-            this.showError('Failed to load chat rooms: ' + error.message);
-        },
+    console.log('🔄 Loading chat rooms for user:', this.currentUser.id, this.currentUser.email);
+
+    const sub = this.chatService.getChatRooms().subscribe({
+      next: (rooms: any[]) => {
+        console.log('📦 Raw chat rooms received:', rooms);
+
+        if (rooms.length === 0) {
+          console.log('❌ Backend returned empty rooms array');
+          this.chatRooms = [];
+          this.selectedRoom = null;
+          this.messages = [];
+          this.showError('No chat rooms found.');
+          return;
+        }
+
+        // Normalize rooms with better debugging
+        this.chatRooms = rooms.map((room: any) => {
+          const customer = this.normalizeUser(room.customer);
+          const designer = this.normalizeUser(room.designer);
+
+          const normalizedRoom = {
+            ...room,
+            customer,
+            designer,
+            unread_count: room.unread_count || 0,
+            created_at: room.created_at || new Date().toISOString(),
+            updated_at: room.updated_at || new Date().toISOString(),
+          } as ChatRoom;
+
+          console.log(`   Room ${normalizedRoom.id}: Customer ${customer.id} (${customer.email}), Designer ${designer.id} (${designer.email})`);
+          return normalizedRoom;
+        });
+
+        // Filter rooms to only include those where current user is a participant
+        const userRooms = this.chatRooms.filter(room => {
+          const isParticipant = room.customer.id === this.currentUser?.id ||
+            room.designer.id === this.currentUser?.id;
+          console.log(`   Room ${room.id} - User ${this.currentUser?.id} participant: ${isParticipant}`);
+          return isParticipant;
+        });
+
+        console.log('✅ Rooms user has access to:', userRooms.map(r => r.id));
+
+        if (userRooms.length > 0) {
+          if (!this.selectedRoom || !this.userRoomsIncludes(this.selectedRoom, userRooms)) {
+            this.selectRoom(userRooms[0]);
+          }
+        } else {
+          this.selectedRoom = null;
+          this.messages = [];
+          console.log('❌ No accessible chat rooms for user');
+          this.showError('No accessible chat rooms found. Please start a new chat.');
+        }
+      },
+      error: (error) => {
+        console.error('❌ Error loading chat rooms:', error);
+        this.showError('Failed to load chat rooms: ' + error.message);
+      },
     });
     this.subscriptions.push(sub);
-}
+  }
 
-// Helper method to check if room is in userRooms array
-private userRoomsIncludes(room: ChatRoom, userRooms: ChatRoom[]): boolean {
+  // Helper method to check if room is in userRooms array
+  private userRoomsIncludes(room: ChatRoom, userRooms: ChatRoom[]): boolean {
     return userRooms.some(userRoom => userRoom.id === room.id);
-}
+  }
 
 
 
@@ -232,26 +232,26 @@ private userRoomsIncludes(room: ChatRoom, userRooms: ChatRoom[]): boolean {
 
   // ===== Room & message actions =====
 
-selectRoom(room: ChatRoom | null): void {
+  selectRoom(room: ChatRoom | null): void {
     if (!room) return;
 
     console.log('Selecting room:', room.id, 'for user:', this.currentUser?.id);
-    
+
     // Improved participant detection - compare IDs properly
-    const isParticipant = room.customer?.id === this.currentUser?.id || 
-                         room.designer?.id === this.currentUser?.id;
-    
+    const isParticipant = room.customer?.id === this.currentUser?.id ||
+      room.designer?.id === this.currentUser?.id;
+
     console.log('Participant check:', {
-        roomCustomerId: room.customer?.id,
-        roomDesignerId: room.designer?.id,
-        currentUserId: this.currentUser?.id,
-        isParticipant: isParticipant
+      roomCustomerId: room.customer?.id,
+      roomDesignerId: room.designer?.id,
+      currentUserId: this.currentUser?.id,
+      isParticipant: isParticipant
     });
-    
+
     if (!isParticipant) {
-        console.error('User not authorized for this room');
-        this.showError('You do not have access to this chat room');
-        return;
+      console.error('User not authorized for this room');
+      this.showError('You do not have access to this chat room');
+      return;
     }
 
     this.selectedRoom = room;
@@ -260,75 +260,83 @@ selectRoom(room: ChatRoom | null): void {
     this.chatService.disconnect();
 
     this.chatService
-        .connect(room.id.toString())
-        .then(() => {
-            this.chatService.onMessage((message: any) => {
-                if (message.room === this.selectedRoom?.id) {
-                    this.messages.push(this.normalizeMessage(message));
-                    this.scrollToBottom();
-                }
-            });
-        })
-        .catch((error) => {
-            console.error('WebSocket connection failed:', error);
-            this.showError('Failed to connect to chat. Please refresh the page.');
+      .connect(room.id.toString())
+      .then(() => {
+        this.chatService.onMessage((message: any) => {
+          if (message.room === this.selectedRoom?.id) {
+            this.messages.push(this.normalizeMessage(message));
+            this.scrollToBottom();
+          }
         });
-}
+      })
+      .catch((error) => {
+        console.error('WebSocket connection failed:', error);
+        this.showError('Failed to connect to chat. Please refresh the page.');
+      });
+  }
 
   async startNewChat(user: User): Promise<void> {
     if (!this.currentUser) {
-        this.showError('Please log in to start a chat');
-        return;
+      this.showError('Please log in to start a chat');
+      return;
     }
+
+    console.log('🔍 DEBUG: Current user data:', this.currentUser);
+    console.log('🔍 DEBUG: Selected user data:', user);
+    // Make sure you're using UserProfile IDs, not User IDs
+    const currentUserProfileId = this.currentUser.id;
+    const targetUserProfileId = user.id;
+
+    console.log('🔍 DEBUG: Using IDs - current:', currentUserProfileId, 'target:', targetUserProfileId);
     if (!user?.id) {
-        this.showError('Invalid user selected');
-        return;
+      this.showError('Invalid user selected');
+      return;
     }
     if (!this.isChatEligible(user)) {
-        this.showError('Only customers and designers can start chats, and only with the opposite role.');
-        return;
+      this.showError('Only customers and designers can start chats, and only with the opposite role.');
+      return;
     }
 
     try {
-        this.selectedUserForNewChat = user.id;
-        this.isSending = true;
+      this.selectedUserForNewChat = user.id;
+      this.isSending = true;
 
-        console.log('Starting new chat between:', this.currentUser.id, 'and', user.id);
+      console.log('Starting new chat between:', this.currentUser.id, 'and', user.id);
 
-        // Check for existing room (both directions)
-        const existingRoom = this.chatRooms.find(
-            (room) =>
-                (room.customer.id === this.currentUser?.id && room.designer.id === user.id) ||
-                (room.designer.id === this.currentUser?.id && room.customer.id === user.id)
-        );
-        
-        if (existingRoom) {
-            console.log('Existing room found:', existingRoom.id);
-            this.selectRoom(existingRoom);
-            return;
-        }
+      // Check for existing room (both directions)
+      const existingRoom = this.chatRooms.find(
+        (room) =>
+          (room.customer.id === this.currentUser?.id && room.designer.id === user.id) ||
+          (room.designer.id === this.currentUser?.id && room.customer.id === user.id)
+      );
 
-        // Use the current user's ID as sender, not a hardcoded ID
-        const payload = { sender_id: this.currentUser.id, receiver_id: user.id };
-        console.log('Creating new room with payload:', payload);
-        
-        const response = await this.chatService.createChatRoom(payload).toPromise();
+      if (existingRoom) {
+        console.log('Existing room found:', existingRoom.id);
+        this.selectRoom(existingRoom);
+        return;
+      }
 
-        if (response) {
-            console.log('Room created successfully:', response.room_id);
-            
-            // Reload chat rooms to get the new room
-            this.loadChatRooms();
-            this.showSuccess('Chat started successfully');
-        }
+      // Use the current user's ID as sender, not a hardcoded ID
+      const payload = { sender_id: this.currentUser.id, receiver_id: user.id };
+      console.log('Creating new room with payload:', payload);
+
+      const response = await this.chatService.createChatRoom(payload).toPromise();
+
+      if (response) {
+        console.log('Room created successfully:', response.room_id);
+
+        // Reload chat rooms to get the new room
+        this.loadChatRooms();
+        this.showSuccess('Chat started successfully');
+      }
     } catch (error) {
-        console.error('Error creating chat room:', error);
-        this.showError(typeof error === 'string' ? error : 'Failed to start a new chat');
+      console.error('Error creating chat room:', error);
+      this.showError(typeof error === 'string' ? error : 'Failed to start a new chat');
     } finally {
-        this.isSending = false;
-        this.selectedUserForNewChat = null;
+      this.isSending = false;
+      this.selectedUserForNewChat = null;
     }
-}
+  }
 
   // Send message (Enter => send; Shift+Enter => newline)
   sendMessage(event?: KeyboardEvent): void {
