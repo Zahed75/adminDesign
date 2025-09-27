@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { environment } from '../../enviornments/enviornment';
 
 interface User {
@@ -107,13 +107,23 @@ sendMessage(
         .pipe(catchError(this.handleError));
 }
 
-  getAllUsers(): Observable<User[]> {
+  
+
+
+
+// In chat.service.ts - fix getAllUsers to return proper data
+getAllUsers(): Observable<User[]> {
     return this.http
         .get<User[]>(`${this.apiUrl}/get-all-users/`, {
           headers: this.getHeaders(),
         })
-        .pipe(catchError(this.handleError));
-  }
+        .pipe(
+            tap(users => console.log('👥 DEBUG: Users from API:', users)),
+            catchError(this.handleError)
+        );
+}
+
+
 
   createChatRoom(payload: { sender_id: number; receiver_id: number }): Observable<CreateChatRoomResponse> {
     return this.http

@@ -215,20 +215,25 @@ export class ChatSystemComponent implements OnInit, OnDestroy {
     this.subscriptions.push(sub);
   }
 
-  loadUsers(): void {
+  // In chat-system.component.ts
+loadUsers(): void {
     const sub = this.chatService.getAllUsers().subscribe({
-      next: (users: any[]) => {
-        const normalized = users
-          .map((u) => this.normalizeUser(u))
-          .filter((u) => u.id !== this.currentUser?.id);
+        next: (users: any[]) => {
+            console.log('🔍 DEBUG: Raw users from API:', users);
+            
+            const normalized = users
+                .map((u) => this.normalizeUser(u))
+                .filter((u) => u.id !== this.currentUser?.id);
 
-        // Only opposite roles (CUS ↔ DES)
-        this.users = normalized.filter((u) => this.isChatEligible(u));
-      },
-      error: () => this.showError('Failed to load users'),
+            console.log('🔍 DEBUG: Normalized users:', normalized);
+            
+            this.users = normalized.filter((u) => this.isChatEligible(u));
+            console.log('🔍 DEBUG: Filtered users for chat:', this.users);
+        },
+        error: () => this.showError('Failed to load users'),
     });
     this.subscriptions.push(sub);
-  }
+}
 
   // ===== Room & message actions =====
 
