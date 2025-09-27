@@ -132,56 +132,61 @@ sendMessage(
         );
   }
 
-  connect(roomId: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const token = localStorage.getItem('token');
-      if (!token || !roomId) {
-        return reject('Invalid token or room');
+connect(roomId: string): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const token = localStorage.getItem('token');
+    if (!token || !roomId) {
+      return reject('Invalid token or room');
+    }
+
+    // Use the corrected environment configuration
+    const protocol = 'wss://'; // Since your API uses HTTPS, use WSS
+    const host = environment.wsHost; // This should now be just 'api.designpro.qa'
+    
+    const wsUrl = `${protocol}${host}/ws/chat/${roomId}/?token=${token}`;
+
+    console.log('🔌 WebSocket connecting to:', wsUrl);
+    
+    this.socket = new WebSocket(wsUrl);
+
+    this.socket.onopen = () => {
+      console.log('✅ WebSocket connected');
+      this.isConnected = true;
+      resolve();
+    };
+
+    this.socket.onerror = (error) => {
+      console.error('❌ WebSocket error:', error);
+      this.isConnected = false;
+      reject(`WebSocket connection failed: ${error}`);
+    };
+
+    this.socket.onmessage = (event) => {
+      try {
+        const data: WebSocketMessage = JSON.parse(event.data);
+        if (data.type === 'chat_message') {
+          this.listeners.forEach((listener) => listener(data.message));
+        }
+      } catch (error) {
+        console.error('Error parsing WebSocket message:', error);
       }
+    };
 
-      const protocol = window.location.protocol === 'https:' ? 'wss://' : 'ws://';
-      const host = environment.wsHost || window.location.host;
-      const wsUrl = `${protocol}${host}/ws/chat/${roomId}/?token=${token}`;
-
-      this.socket = new WebSocket(wsUrl);
-
-      this.socket.onopen = () => {
-        console.log('WebSocket connected');
-        this.isConnected = true;
-        resolve();
-      };
-
-      this.socket.onerror = (error) => {
-        console.error('WebSocket error:', error);
-        this.isConnected = false;
-        reject(error);
-      };
-
-      this.socket.onmessage = (event) => {
-        try {
-          const data: WebSocketMessage = JSON.parse(event.data);
-          if (data.type === 'chat_message') {
-            this.listeners.forEach((listener) => listener(data.message));
+    this.socket.onclose = (event) => {
+      console.log('🔌 WebSocket disconnected', event);
+      this.isConnected = false;
+      if (!event.wasClean) {
+        console.error('WebSocket closed unexpectedly');
+        setTimeout(() => {
+          if (roomId && this.socket === null) { // Only reconnect if socket is null
+            console.log('🔄 Attempting to reconnect...');
+            this.connect(roomId).catch(err => console.error('Reconnect failed:', err));
           }
-        } catch (error) {
-          console.error('Error parsing WebSocket message:', error);
-        }
-      };
-
-      this.socket.onclose = (event) => {
-        console.log('WebSocket disconnected', event);
-        this.isConnected = false;
-        if (!event.wasClean) {
-          console.error('WebSocket closed unexpectedly');
-          setTimeout(() => {
-            if (roomId) {
-              this.connect(roomId).catch(err => console.error('Reconnect failed:', err));
-            }
-          }, 5000);
-        }
-      };
-    });
-  }
+        }, 5000);
+      }
+    };
+  });
+}
 
   disconnect(): void {
     if (this.socket) {

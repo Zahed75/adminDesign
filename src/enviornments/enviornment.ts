@@ -22,5 +22,5 @@
 export const environment = {
   production: false,
   apiBaseUrl: 'https://api.designpro.qa', // Local development URL
-  wsHost: 'https://api.designpro.qa'
+  wsHost: 'api.designpro.qa' // Remove the https:// prefix
 };
