@@ -199,6 +199,58 @@ export class ChatSystemComponent implements OnInit, OnDestroy {
     this.subscriptions.push(sub);
   }
 
+  // selectRoom(room: ChatRoom | null): void {
+  //   if (!room) return;
+
+  //   console.log('Selecting room:', room.id, 'for user:', this.currentUser?.email);
+    
+  //   // Check by email (to handle ID mismatch)
+  //   const isParticipant = room.customer.email === this.currentUser?.email || 
+  //                        room.designer.email === this.currentUser?.email;
+    
+  //   console.log('Participant check by email:', {
+  //       roomCustomerEmail: room.customer.email,
+  //       roomDesignerEmail: room.designer.email,
+  //       currentUserEmail: this.currentUser?.email,
+  //       isParticipant: isParticipant
+  //   });
+    
+  //   if (!isParticipant) {
+  //       console.error('User not authorized for this room');
+  //       this.showError('You do not have access to this chat room');
+  //       return;
+  //   }
+
+  //   this.selectedRoom = room;
+  //   this.messages = [];
+  //   this.loadMessages(room.id);
+  //   this.chatService.disconnect();
+
+  //   this.chatService
+  //       .connect(room.id.toString())
+  //       .then(() => {
+  //           this.chatService.onMessage((message: any) => {
+  //               if (message.room === this.selectedRoom?.id) {
+  //                   this.messages.push(this.normalizeMessage(message));
+  //                   this.scrollToBottom();
+  //               }
+  //           });
+  //       })
+  //       .catch((error) => {
+  //           console.error('WebSocket connection failed:', error);
+  //           this.showError('Failed to connect to chat. Please refresh the page.');
+  //       });
+  // }
+
+
+
+
+
+  // In chat-system.component.ts - update the selectRoom method and add message handling
+
+
+
+
   selectRoom(room: ChatRoom | null): void {
     if (!room) return;
 
@@ -221,18 +273,42 @@ export class ChatSystemComponent implements OnInit, OnDestroy {
         return;
     }
 
+    // Clear previous room data
     this.selectedRoom = room;
     this.messages = [];
-    this.loadMessages(room.id);
     this.chatService.disconnect();
 
+    // Load existing messages first
+    this.loadMessages(room.id);
+
+    // Then connect to WebSocket for real-time updates
     this.chatService
         .connect(room.id.toString())
         .then(() => {
+            console.log('✅ WebSocket connected, setting up message listener');
+            
+            // Set up message listener for real-time updates
             this.chatService.onMessage((message: any) => {
+                console.log('📨 WebSocket message received:', message);
+                
+                // Only add message if it belongs to the current room
                 if (message.room === this.selectedRoom?.id) {
-                    this.messages.push(this.normalizeMessage(message));
-                    this.scrollToBottom();
+                    // Check if message already exists to avoid duplicates
+                    const messageExists = this.messages.some(m => m.id === message.id);
+                    if (!messageExists) {
+                        console.log('✅ Adding new message to chat:', message);
+                        this.messages.push(this.normalizeMessage(message));
+                        this.scrollToBottom();
+                        
+                        // Play notification sound for new messages from others
+                        if (message.sender !== this.currentUser?.id) {
+                            this.playNotificationSound();
+                        }
+                    } else {
+                        console.log('⚠️ Message already exists, skipping:', message.id);
+                    }
+                } else {
+                    console.log('❌ Message for different room, ignoring. Current room:', this.selectedRoom?.id, 'Message room:', message.room);
                 }
             });
         })
@@ -240,7 +316,54 @@ export class ChatSystemComponent implements OnInit, OnDestroy {
             console.error('WebSocket connection failed:', error);
             this.showError('Failed to connect to chat. Please refresh the page.');
         });
-  }
+}
+
+// Add notification sound method
+private playNotificationSound(): void {
+    try {
+        const audio = new Audio();
+        audio.src = 'assets/sounds/notification.mp3'; // Add a notification sound file
+        audio.volume = 0.3;
+        audio.play().catch(e => console.log('Audio play failed:', e));
+    } catch (error) {
+        console.log('Notification sound error:', error);
+    }
+}
+
+// Update the normalizeMessage method to ensure proper formatting
+private normalizeMessage(message: any): any {
+    try {
+        const normalized = {
+            id: message?.id || 0,
+            room: message?.room || this.selectedRoom?.id || 0,
+            sender: message?.sender || message.sender_name || '',
+            sender_name: message?.sender_name || message.sender || '',
+            content: message?.content || message?.text || '',
+            timestamp: message?.timestamp || new Date().toISOString(),
+            is_read: message?.is_read || false,
+            file_url: message?.file_url || message?.file,
+            audio_url: message?.audio_url || message?.audio,
+        };
+        
+        console.log('📝 Normalized message:', normalized);
+        return normalized;
+    } catch (error) {
+        console.error('Error normalizing message:', error);
+        return {
+            id: 0,
+            room: this.selectedRoom?.id || 0,
+            sender: '',
+            sender_name: '',
+            content: 'Invalid message',
+            timestamp: new Date().toISOString(),
+            is_read: false,
+        };
+    }
+}
+
+
+
+
 
   async startNewChat(user: User): Promise<void> {
     if (!this.currentUser) {
@@ -329,30 +452,6 @@ export class ChatSystemComponent implements OnInit, OnDestroy {
     };
   }
 
-  private normalizeMessage(message: any): any {
-    try {
-      return {
-        id: message?.id || 0,
-        room: message?.room || this.selectedRoom?.id || 0,
-        sender: message?.sender || '',
-        content: message?.content || message?.text || '',
-        timestamp: message?.timestamp || new Date().toISOString(),
-        is_read: message?.is_read || false,
-        file_url: message?.file_url || message?.file,
-        audio_url: message?.audio_url || message?.audio,
-      };
-    } catch (error) {
-      console.error('Error normalizing message:', error);
-      return {
-        id: 0,
-        room: this.selectedRoom?.id || 0,
-        sender: '',
-        content: 'Invalid message',
-        timestamp: new Date().toISOString(),
-        is_read: false,
-      };
-    }
-  }
 
   public getParticipantName(room: ChatRoom | null): string {
     if (!room || !this.currentUser) return 'Unknown';

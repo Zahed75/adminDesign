@@ -132,59 +132,128 @@ export class ChatService {
         );
   }
 
-  connect(roomId: string): Promise<void> {
-    return new Promise((resolve, reject) => {
-      const token = localStorage.getItem('token');
-      if (!token || !roomId) {
-        return reject('Invalid token or room');
-      }
+  // connect(roomId: string): Promise<void> {
+  //   return new Promise((resolve, reject) => {
+  //     const token = localStorage.getItem('token');
+  //     if (!token || !roomId) {
+  //       return reject('Invalid token or room');
+  //     }
 
-      const protocol = 'wss://';
-      const host = environment.wsHost;
-      const wsUrl = `${protocol}${host}/ws/chat/${roomId}/?token=${token}`;
+  //     const protocol = 'wss://';
+  //     const host = environment.wsHost;
+  //     const wsUrl = `${protocol}${host}/ws/chat/${roomId}/?token=${token}`;
 
-      console.log('🔌 WebSocket connecting to:', wsUrl);
+  //     console.log('🔌 WebSocket connecting to:', wsUrl);
       
-      this.socket = new WebSocket(wsUrl);
+  //     this.socket = new WebSocket(wsUrl);
 
-      this.socket.onopen = () => {
-        console.log('✅ WebSocket connected');
-        this.isConnected = true;
-        resolve();
-      };
+  //     this.socket.onopen = () => {
+  //       console.log('✅ WebSocket connected');
+  //       this.isConnected = true;
+  //       resolve();
+  //     };
 
-      this.socket.onerror = (error) => {
-        console.error('❌ WebSocket error:', error);
-        this.isConnected = false;
-        reject(error);
-      };
+  //     this.socket.onerror = (error) => {
+  //       console.error('❌ WebSocket error:', error);
+  //       this.isConnected = false;
+  //       reject(error);
+  //     };
 
-      this.socket.onmessage = (event) => {
-        try {
-          const data: WebSocketMessage = JSON.parse(event.data);
-          if (data.type === 'chat_message') {
-            this.listeners.forEach((listener) => listener(data.message));
-          }
-        } catch (error) {
-          console.error('Error parsing WebSocket message:', error);
+  //     this.socket.onmessage = (event) => {
+  //       try {
+  //         const data: WebSocketMessage = JSON.parse(event.data);
+  //         if (data.type === 'chat_message') {
+  //           this.listeners.forEach((listener) => listener(data.message));
+  //         }
+  //       } catch (error) {
+  //         console.error('Error parsing WebSocket message:', error);
+  //       }
+  //     };
+
+  //     this.socket.onclose = (event) => {
+  //       console.log('🔌 WebSocket disconnected', event);
+  //       this.isConnected = false;
+  //       if (!event.wasClean) {
+  //         console.error('WebSocket closed unexpectedly');
+  //         setTimeout(() => {
+  //           if (roomId && this.socket === null) {
+  //             console.log('🔄 Attempting to reconnect...');
+  //             this.connect(roomId).catch(err => console.error('Reconnect failed:', err));
+  //           }
+  //         }, 5000);
+  //       }
+  //     };
+  //   });
+  // }
+
+
+
+  // In chat.service.ts - update the connect method and message handling
+connect(roomId: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+        const token = localStorage.getItem('token');
+        if (!token || !roomId) {
+            return reject('Invalid token or room');
         }
-      };
 
-      this.socket.onclose = (event) => {
-        console.log('🔌 WebSocket disconnected', event);
-        this.isConnected = false;
-        if (!event.wasClean) {
-          console.error('WebSocket closed unexpectedly');
-          setTimeout(() => {
-            if (roomId && this.socket === null) {
-              console.log('🔄 Attempting to reconnect...');
-              this.connect(roomId).catch(err => console.error('Reconnect failed:', err));
+        const protocol = 'wss://';
+        const host = environment.wsHost;
+        const wsUrl = `${protocol}${host}/ws/chat/${roomId}/?token=${token}`;
+
+        console.log('🔌 WebSocket connecting to:', wsUrl);
+        
+        this.socket = new WebSocket(wsUrl);
+
+        this.socket.onopen = () => {
+            console.log('✅ WebSocket connected');
+            this.isConnected = true;
+            resolve();
+        };
+
+        this.socket.onerror = (error) => {
+            console.error('❌ WebSocket error:', error);
+            this.isConnected = false;
+            reject(error);
+        };
+
+        this.socket.onmessage = (event) => {
+            try {
+                console.log('📨 Raw WebSocket message:', event.data);
+                const data = JSON.parse(event.data);
+                console.log('📨 Parsed WebSocket data:', data);
+                
+                if (data.type === 'chat_message') {
+                    console.log('✅ Dispatching chat message to listeners');
+                    this.listeners.forEach((listener) => listener(data.message));
+                } else if (data.type === 'message_read') {
+                    console.log('📖 Message read update:', data);
+                    // Handle read receipts if needed
+                } else {
+                    console.log('📨 Other WebSocket message type:', data.type);
+                }
+            } catch (error) {
+                console.error('❌ Error parsing WebSocket message:', error);
+                console.error('Raw message that failed:', event.data);
             }
-          }, 5000);
-        }
-      };
+        };
+
+        this.socket.onclose = (event) => {
+            console.log('🔌 WebSocket disconnected', event);
+            this.isConnected = false;
+            if (!event.wasClean) {
+                console.error('WebSocket closed unexpectedly');
+                setTimeout(() => {
+                    if (roomId && this.socket === null) {
+                        console.log('🔄 Attempting to reconnect...');
+                        this.connect(roomId).catch(err => console.error('Reconnect failed:', err));
+                    }
+                }, 5000);
+            }
+        };
     });
-  }
+}
+
+
 
   disconnect(): void {
     if (this.socket) {

@@ -2,17 +2,18 @@
   <!-- Sidebar -->
   <div class="w-80 bg-white border-r border-gray-200 flex flex-col">
     <!-- Header -->
-    <div class="p-4 border-b border-gray-200">
-      <h2 class="text-xl font-semibold text-gray-800">Messages</h2>
-      <div class="flex items-center mt-2">
-        <div
-          class="w-3 h-3 rounded-full mr-2"
-          [class.bg-green-500]="chatService.isConnected"
-          [class.bg-red-500]="!chatService.isConnected"
-        ></div>
-        <span class="text-xs">{{ chatService.isConnected ? 'Connected' : 'Disconnected' }}</span>
-      </div>
-    </div>
+    <!-- In your chat-system.component.html - add connection status -->
+<div class="flex items-center mt-2">
+    <div
+        class="w-3 h-3 rounded-full mr-2"
+        [class.bg-green-500]="chatService.isConnected"
+        [class.bg-red-500]="!chatService.isConnected"
+    ></div>
+    <span class="text-xs">{{ chatService.isConnected ? 'Connected (Real-time)' : 'Disconnected' }}</span>
+    <span *ngIf="messages.length > 0" class="text-xs ml-2 text-gray-500">
+        {{ messages.length }} messages
+    </span>
+</div>
 
     <!-- Chat Rooms -->
     <div class="flex-1 overflow-y-auto">
