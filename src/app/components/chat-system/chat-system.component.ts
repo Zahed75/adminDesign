@@ -364,6 +364,34 @@ private normalizeMessage(message: any): any {
 
 
 
+// If you need to update how messages are sent via WebSocket
+// In your chat-system.component.ts, ensure you're using the correct WebSocket message format
+private setupWebSocketMessageHandler(): void {
+    this.chatService.onMessage((message: any) => {
+        console.log('📨 WebSocket message received in handler:', message);
+        
+        // Only add message if it belongs to the current room
+        if (message.room === this.selectedRoom?.id) {
+            // Check if message already exists to avoid duplicates
+            const messageExists = this.messages.some(m => m.id === message.id);
+            if (!messageExists) {
+                console.log('✅ Adding new message to chat:', message);
+                const normalizedMessage = this.normalizeMessage(message);
+                this.messages.push(normalizedMessage);
+                this.scrollToBottom();
+                
+                // Play notification sound for new messages from others
+                if (message.sender !== this.currentUser?.id) {
+                    this.playNotificationSound();
+                }
+            }
+        }
+    });
+}
+
+
+
+
 
   async startNewChat(user: User): Promise<void> {
     if (!this.currentUser) {
