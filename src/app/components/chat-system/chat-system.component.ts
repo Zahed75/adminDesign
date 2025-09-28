@@ -1,14 +1,7 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  ViewChild,
-  ElementRef,
-  CUSTOM_ELEMENTS_SCHEMA,
-} from '@angular/core';
+// chat-system.component.ts
+import { Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
 import { ChatService } from '../../../services/chat/chat.service';
 import { Subscription } from 'rxjs';
 
@@ -27,7 +20,6 @@ interface User {
   username?: string;
   user_type: string;
   email?: string;
-  avatar?: string;
 }
 
 interface ChatRoom {
@@ -55,21 +47,15 @@ interface ChatRoom {
     ToastModule,
   ],
   providers: [MessageService],
-  // Defensive for PrimeNG custom elements like <p-avatar />
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 })
-
-
-
 export class ChatSystemComponent implements OnInit, OnDestroy {
-  // ===== State =====
   chatRooms: ChatRoom[] = [];
   selectedRoom: ChatRoom | null = null;
   messages: any[] = [];
   users: User[] = [];
 
   newMessage = '';
-  currentUser: User | null = null;
+  currentUser: any = null;
 
   selectedFile: File | null = null;
   audioBlob: Blob | null = null;
@@ -86,26 +72,22 @@ export class ChatSystemComponent implements OnInit, OnDestroy {
 
   private subscriptions: Subscription[] = [];
 
-  // Only these roles can chat
-  private readonly ALLOWED_ROLES = new Set(['CUS', 'DES']);
-
   constructor(
     public chatService: ChatService,
     private sanitizer: DomSanitizer,
     private messageService: MessageService
-  ) { }
-
-  // ===== Lifecycle =====
+  ) {}
 
   ngOnInit(): void {
     const userData = localStorage.getItem('user');
     try {
-      const raw = userData ? JSON.parse(userData) : null;
-      this.currentUser = raw ? this.normalizeUser(raw) : null;
+      this.currentUser = userData ? JSON.parse(userData) : null;
       if (!this.currentUser?.id) throw new Error('Invalid user data');
 
       // Ensure display name exists
       this.currentUser.name = this.coalesceName(this.currentUser);
+
+      console.log('🔍 DEBUG: Current user loaded:', this.currentUser);
 
       this.loadChatRooms();
       this.loadUsers();
@@ -121,38 +103,31 @@ export class ChatSystemComponent implements OnInit, OnDestroy {
     if (this.mediaRecorder) this.stopRecording();
   }
 
-  // ===== Data loading =====
-
-
-
-  // In chat-system.component.ts
-
   loadChatRooms(): void {
     if (!this.currentUser) {
       this.showError('User not logged in');
       return;
     }
-
+    
     console.log('🔄 Loading chat rooms for user:', this.currentUser.id, this.currentUser.email);
-
+    
     const sub = this.chatService.getChatRooms().subscribe({
       next: (rooms: any[]) => {
         console.log('📦 Raw chat rooms received:', rooms);
-
+        
         if (rooms.length === 0) {
-          console.log('❌ Backend returned empty rooms array');
+          console.log('No chat rooms found');
           this.chatRooms = [];
           this.selectedRoom = null;
           this.messages = [];
-          this.showError('No chat rooms found.');
           return;
         }
-
-        // Normalize rooms with better debugging
+        
+        // Normalize rooms
         this.chatRooms = rooms.map((room: any) => {
           const customer = this.normalizeUser(room.customer);
           const designer = this.normalizeUser(room.designer);
-
+          
           const normalizedRoom = {
             ...room,
             customer,
@@ -161,21 +136,23 @@ export class ChatSystemComponent implements OnInit, OnDestroy {
             created_at: room.created_at || new Date().toISOString(),
             updated_at: room.updated_at || new Date().toISOString(),
           } as ChatRoom;
-
-          console.log(`   Room ${normalizedRoom.id}: Customer ${customer.id} (${customer.email}), Designer ${designer.id} (${designer.email})`);
+          
+          console.log(`   Room ${normalizedRoom.id}: Customer ${customer.id}, Designer ${designer.id}`);
           return normalizedRoom;
         });
 
-        // Filter rooms to only include those where current user is a participant
+        console.log('🎯 All normalized chat rooms:', this.chatRooms);
+        
+        // Filter rooms by email (to handle ID mismatch)
         const userRooms = this.chatRooms.filter(room => {
-          const isParticipant = room.customer.id === this.currentUser?.id ||
-            room.designer.id === this.currentUser?.id;
-          console.log(`   Room ${room.id} - User ${this.currentUser?.id} participant: ${isParticipant}`);
+          const isParticipant = room.customer.email === this.currentUser?.email || 
+                              room.designer.email === this.currentUser?.email;
+          console.log(`   Room ${room.id} - User ${this.currentUser?.email} participant: ${isParticipant}`);
           return isParticipant;
         });
-
-        console.log('✅ Rooms user has access to:', userRooms.map(r => r.id));
-
+        
+        console.log('✅ Rooms user has access to:', userRooms);
+        
         if (userRooms.length > 0) {
           if (!this.selectedRoom || !this.userRoomsIncludes(this.selectedRoom, userRooms)) {
             this.selectRoom(userRooms[0]);
@@ -183,26 +160,16 @@ export class ChatSystemComponent implements OnInit, OnDestroy {
         } else {
           this.selectedRoom = null;
           this.messages = [];
-          console.log('❌ No accessible chat rooms for user');
-          this.showError('No accessible chat rooms found. Please start a new chat.');
+          console.log('No accessible chat rooms for user');
         }
       },
       error: (error) => {
-        console.error('❌ Error loading chat rooms:', error);
+        console.error('Error loading chat rooms:', error);
         this.showError('Failed to load chat rooms: ' + error.message);
       },
     });
     this.subscriptions.push(sub);
   }
-
-  // Helper method to check if room is in userRooms array
-  private userRoomsIncludes(room: ChatRoom, userRooms: ChatRoom[]): boolean {
-    return userRooms.some(userRoom => userRoom.id === room.id);
-  }
-
-
-
-
 
   loadMessages(roomId: number): void {
     const sub = this.chatService.getMessages(roomId).subscribe({
@@ -215,48 +182,43 @@ export class ChatSystemComponent implements OnInit, OnDestroy {
     this.subscriptions.push(sub);
   }
 
-  // In chat-system.component.ts
-loadUsers(): void {
+  loadUsers(): void {
     const sub = this.chatService.getAllUsers().subscribe({
-        next: (users: any[]) => {
-            console.log('🔍 DEBUG: Raw users from API:', users);
-            
-            const normalized = users
-                .map((u) => this.normalizeUser(u))
-                .filter((u) => u.id !== this.currentUser?.id);
+      next: (users: any[]) => {
+        console.log('👥 DEBUG: Raw users from API:', users);
+        
+        const normalized = users
+          .map((u) => this.normalizeUser(u))
+          .filter((u) => u.email !== this.currentUser?.email);
 
-            console.log('🔍 DEBUG: Normalized users:', normalized);
-            
-            this.users = normalized.filter((u) => this.isChatEligible(u));
-            console.log('🔍 DEBUG: Filtered users for chat:', this.users);
-        },
-        error: () => this.showError('Failed to load users'),
+        this.users = normalized.filter((u) => this.isChatEligible(u));
+        console.log('👥 DEBUG: Filtered users for chat:', this.users);
+      },
+      error: () => this.showError('Failed to load users'),
     });
     this.subscriptions.push(sub);
-}
-
-  // ===== Room & message actions =====
+  }
 
   selectRoom(room: ChatRoom | null): void {
     if (!room) return;
 
-    console.log('Selecting room:', room.id, 'for user:', this.currentUser?.id);
-
-    // Improved participant detection - compare IDs properly
-    const isParticipant = room.customer?.id === this.currentUser?.id ||
-      room.designer?.id === this.currentUser?.id;
-
-    console.log('Participant check:', {
-      roomCustomerId: room.customer?.id,
-      roomDesignerId: room.designer?.id,
-      currentUserId: this.currentUser?.id,
-      isParticipant: isParticipant
+    console.log('Selecting room:', room.id, 'for user:', this.currentUser?.email);
+    
+    // Check by email (to handle ID mismatch)
+    const isParticipant = room.customer.email === this.currentUser?.email || 
+                         room.designer.email === this.currentUser?.email;
+    
+    console.log('Participant check by email:', {
+        roomCustomerEmail: room.customer.email,
+        roomDesignerEmail: room.designer.email,
+        currentUserEmail: this.currentUser?.email,
+        isParticipant: isParticipant
     });
-
+    
     if (!isParticipant) {
-      console.error('User not authorized for this room');
-      this.showError('You do not have access to this chat room');
-      return;
+        console.error('User not authorized for this room');
+        this.showError('You do not have access to this chat room');
+        return;
     }
 
     this.selectedRoom = room;
@@ -265,85 +227,149 @@ loadUsers(): void {
     this.chatService.disconnect();
 
     this.chatService
-      .connect(room.id.toString())
-      .then(() => {
-        this.chatService.onMessage((message: any) => {
-          if (message.room === this.selectedRoom?.id) {
-            this.messages.push(this.normalizeMessage(message));
-            this.scrollToBottom();
-          }
+        .connect(room.id.toString())
+        .then(() => {
+            this.chatService.onMessage((message: any) => {
+                if (message.room === this.selectedRoom?.id) {
+                    this.messages.push(this.normalizeMessage(message));
+                    this.scrollToBottom();
+                }
+            });
+        })
+        .catch((error) => {
+            console.error('WebSocket connection failed:', error);
+            this.showError('Failed to connect to chat. Please refresh the page.');
         });
-      })
-      .catch((error) => {
-        console.error('WebSocket connection failed:', error);
-        this.showError('Failed to connect to chat. Please refresh the page.');
-      });
   }
 
   async startNewChat(user: User): Promise<void> {
     if (!this.currentUser) {
-      this.showError('Please log in to start a chat');
-      return;
+        this.showError('Please log in to start a chat');
+        return;
     }
-
-    console.log('🔍 DEBUG: Current user data:', this.currentUser);
-    console.log('🔍 DEBUG: Selected user data:', user);
-    // Make sure you're using UserProfile IDs, not User IDs
-    const currentUserProfileId = this.currentUser.id;
-    const targetUserProfileId = user.id;
-
-    console.log('🔍 DEBUG: Using IDs - current:', currentUserProfileId, 'target:', targetUserProfileId);
     if (!user?.id) {
-      this.showError('Invalid user selected');
-      return;
+        this.showError('Invalid user selected');
+        return;
     }
     if (!this.isChatEligible(user)) {
-      this.showError('Only customers and designers can start chats, and only with the opposite role.');
-      return;
+        this.showError('Only customers and designers can start chats, and only with the opposite role.');
+        return;
     }
 
     try {
-      this.selectedUserForNewChat = user.id;
-      this.isSending = true;
+        this.selectedUserForNewChat = user.id;
+        this.isSending = true;
 
-      console.log('Starting new chat between:', this.currentUser.id, 'and', user.id);
+        console.log('Starting new chat between:', this.currentUser.email, 'and', user.email);
 
-      // Check for existing room (both directions)
-      const existingRoom = this.chatRooms.find(
-        (room) =>
-          (room.customer.id === this.currentUser?.id && room.designer.id === user.id) ||
-          (room.designer.id === this.currentUser?.id && room.customer.id === user.id)
-      );
+        // Check for existing room by email
+        const existingRoom = this.chatRooms.find(
+            (room) =>
+                (room.customer.email === this.currentUser?.email && room.designer.email === user.email) ||
+                (room.designer.email === this.currentUser?.email && room.customer.email === user.email)
+        );
+        
+        if (existingRoom) {
+            console.log('Existing room found:', existingRoom.id);
+            this.selectRoom(existingRoom);
+            return;
+        }
 
-      if (existingRoom) {
-        console.log('Existing room found:', existingRoom.id);
-        this.selectRoom(existingRoom);
-        return;
-      }
+        // Only send receiver_id - backend will use current user as sender
+        const payload = { receiver_id: user.id };
+        console.log('Creating new room with payload:', payload);
+        
+        const response = await this.chatService.createChatRoom(payload).toPromise();
 
-      // Use the current user's ID as sender, not a hardcoded ID
-      const payload = { sender_id: this.currentUser.id, receiver_id: user.id };
-      console.log('Creating new room with payload:', payload);
-
-      const response = await this.chatService.createChatRoom(payload).toPromise();
-
-      if (response) {
-        console.log('Room created successfully:', response.room_id);
-
-        // Reload chat rooms to get the new room
-        this.loadChatRooms();
-        this.showSuccess('Chat started successfully');
-      }
+        if (response) {
+            console.log('Room created successfully:', response.room_id);
+            this.showSuccess('Chat started successfully');
+            
+            // Reload chat rooms to get the new room
+            this.loadChatRooms();
+        }
     } catch (error) {
-      console.error('Error creating chat room:', error);
-      this.showError(typeof error === 'string' ? error : 'Failed to start a new chat');
+        console.error('Error creating chat room:', error);
+        this.showError(typeof error === 'string' ? error : 'Failed to start a new chat');
     } finally {
-      this.isSending = false;
-      this.selectedUserForNewChat = null;
+        this.isSending = false;
+        this.selectedUserForNewChat = null;
     }
   }
 
-  // Send message (Enter => send; Shift+Enter => newline)
+  // Helper methods (keep your existing implementations)
+  private userRoomsIncludes(room: ChatRoom, userRooms: ChatRoom[]): boolean {
+    return userRooms.some(userRoom => userRoom.id === room.id);
+  }
+
+  public coalesceName(u?: Partial<User> | null): string {
+    if (!u) return 'Unknown';
+    const n = (u.name || '').trim();
+    const un = (u.username || '').trim();
+    const em = (u.email || '').trim();
+    if (n) return n;
+    if (un) return un;
+    if (em) return em;
+    if (typeof u.id === 'number') return `User #${u.id}`;
+    return 'Unknown';
+  }
+
+  public getInitial(name?: string | null): string {
+    const s = (name || '').trim();
+    return s ? s.charAt(0).toUpperCase() : '?';
+  }
+
+  public normalizeUser(u: any): User {
+    return {
+      id: Number(u?.id ?? 0),
+      name: (u?.name ?? '').toString(),
+      username: (u?.username ?? '').toString(),
+      email: (u?.email ?? '').toString(),
+      user_type: (u?.user_type ?? 'CUS').toString(),
+    };
+  }
+
+  private normalizeMessage(message: any): any {
+    try {
+      return {
+        id: message?.id || 0,
+        room: message?.room || this.selectedRoom?.id || 0,
+        sender: message?.sender || '',
+        content: message?.content || message?.text || '',
+        timestamp: message?.timestamp || new Date().toISOString(),
+        is_read: message?.is_read || false,
+        file_url: message?.file_url || message?.file,
+        audio_url: message?.audio_url || message?.audio,
+      };
+    } catch (error) {
+      console.error('Error normalizing message:', error);
+      return {
+        id: 0,
+        room: this.selectedRoom?.id || 0,
+        sender: '',
+        content: 'Invalid message',
+        timestamp: new Date().toISOString(),
+        is_read: false,
+      };
+    }
+  }
+
+  public getParticipantName(room: ChatRoom | null): string {
+    if (!room || !this.currentUser) return 'Unknown';
+    try {
+      const myEmail = this.currentUser.email;
+      const other = room.customer.email === myEmail ? room.designer : room.customer;
+      return this.coalesceName(other);
+    } catch {
+      return 'Unknown';
+    }
+  }
+
+  public getCurrentUserRole(): string {
+    return this.currentUser?.user_type?.toLowerCase() || '';
+  }
+
+  // Rest of your existing methods (sendMessage, file handling, etc.)
   sendMessage(event?: KeyboardEvent): void {
     if (event && event.key === 'Enter' && event.shiftKey) return;
     if (event && event.key === 'Enter') {
@@ -351,6 +377,7 @@ loadUsers(): void {
       this.processMessageSending();
     }
   }
+
   sendButtonClick(): void {
     this.processMessageSending();
   }
@@ -403,45 +430,6 @@ loadUsers(): void {
     }
   }
 
-  // ===== Helpers used by template (must be public) =====
-
-  /** Normalize role to CUS/DES/'' */
-  public normRole(role?: string): 'CUS' | 'DES' | '' {
-    const r = (role || '').toUpperCase();
-    return r === 'CUS' || r === 'DES' ? r : '';
-  }
-
-  /** Prefer name → username → email → fallback */
-  public coalesceName(u?: Partial<User> | null): string {
-    if (!u) return 'Unknown';
-    const n = (u.name || '').trim();
-    const un = (u.username || '').trim();
-    const em = (u.email || '').trim();
-    if (n) return n;
-    if (un) return un;
-    if (em) return em;
-    if (typeof u.id === 'number') return `User #${u.id}`;
-    return 'Unknown';
-  }
-
-  /** Initial for avatar label */
-  public getInitial(name?: string | null): string {
-    const s = (name || '').trim();
-    return s ? s.charAt(0).toUpperCase() : '?';
-  }
-
-  /** Normalize a user object to ensure fields exist as strings */
-  public normalizeUser(u: any): User {
-    return {
-      id: Number(u?.id ?? 0),
-      name: (u?.name ?? '').toString(),
-      username: (u?.username ?? '').toString(),
-      email: (u?.email ?? '').toString(),
-      user_type: (u?.user_type ?? 'CUS').toString(),
-      avatar: (u?.avatar ?? '').toString(),
-    };
-  }
-
   private async uploadFile(file: File): Promise<string> {
     return new Promise((resolve) => {
       const reader = new FileReader();
@@ -463,46 +451,6 @@ loadUsers(): void {
       const container = document.querySelector('.chat-messages-container') as HTMLElement | null;
       if (container) container.scrollTop = container.scrollHeight;
     }, 100);
-  }
-
-  private normalizeMessage(message: any): any {
-    try {
-      return {
-        id: message?.id || 0,
-        room: message?.room || this.selectedRoom?.id || 0,
-        sender: message?.sender || '',
-        content: message?.content || message?.text || '',
-        timestamp: message?.timestamp || new Date().toISOString(),
-        is_read: message?.is_read || false,
-        file_url: message?.file_url || message?.file,
-        audio_url: message?.audio_url || message?.audio,
-      };
-    } catch (error) {
-      console.error('Error normalizing message:', error);
-      return {
-        id: 0,
-        room: this.selectedRoom?.id || 0,
-        sender: '',
-        content: 'Invalid message',
-        timestamp: new Date().toISOString(),
-        is_read: false,
-      };
-    }
-  }
-
-  public getParticipantName(room: ChatRoom | null): string {
-    if (!room || !this.currentUser) return 'Unknown';
-    try {
-      const meId = this.currentUser.id;
-      const other = room.customer?.id === meId ? room.designer : room.customer;
-      return this.coalesceName(other);
-    } catch {
-      return 'Unknown';
-    }
-  }
-
-  public getCurrentUserRole(): string {
-    return this.currentUser?.user_type?.toLowerCase() || '';
   }
 
   public onFileSelected(event: Event): void {
@@ -610,7 +558,6 @@ loadUsers(): void {
     });
   }
 
-  // Role pair check
   private isChatEligible(user: User): boolean {
     if (!this.currentUser) return false;
     const me = this.normRole(this.currentUser.user_type);
@@ -618,4 +565,11 @@ loadUsers(): void {
     if (!this.ALLOWED_ROLES.has(me) || !this.ALLOWED_ROLES.has(them)) return false;
     return me !== them;
   }
+
+  private normRole(role?: string): 'CUS' | 'DES' | '' {
+    const r = (role || '').toUpperCase();
+    return r === 'CUS' || r === 'DES' ? r : '';
+  }
+
+  private readonly ALLOWED_ROLES = new Set(['CUS', 'DES']);
 }

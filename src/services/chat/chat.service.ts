@@ -1,3 +1,4 @@
+// services/chat/chat.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
@@ -8,6 +9,7 @@ interface User {
   id: number;
   name: string;
   user_type: string;
+  email: string;
 }
 
 interface ChatRoom {
@@ -32,10 +34,6 @@ interface Message {
 interface CreateChatRoomResponse {
   detail: string;
   room_id: number;
-  data?: {
-    created_at: string;
-    updated_at: string;
-  };
 }
 
 interface WebSocketMessage {
@@ -55,26 +53,27 @@ export class ChatService {
 
   constructor(private http: HttpClient) {}
 
-  // In chat.service.ts
-private getHeaders(): HttpHeaders {
+  private getHeaders(): HttpHeaders {
     const token = localStorage.getItem('token');
     const userData = localStorage.getItem('user');
     
-    console.log('🔐 Token being used:', token);
-    console.log('👤 User data from localStorage:', userData);
+    console.log('🔐 Token being used:', token ? 'Yes' : 'No');
     
     return new HttpHeaders({
         Authorization: `Bearer ${token || ''}`,
         'Content-Type': 'application/json',
     });
-}
+  }
 
   getChatRooms(): Observable<ChatRoom[]> {
     return this.http
         .get<ChatRoom[]>(`${this.apiUrl}/chat-rooms/`, {
           headers: this.getHeaders(),
         })
-        .pipe(catchError(this.handleError));
+        .pipe(
+          tap(rooms => console.log('📦 DEBUG: Raw chat rooms received:', rooms)),
+          catchError(this.handleError)
+        );
   }
 
   getMessages(roomId: number): Observable<Message[]> {
@@ -84,20 +83,18 @@ private getHeaders(): HttpHeaders {
             headers: this.getHeaders(),
         })
         .pipe(catchError(this.handleError));
-}
+  }
 
-
-sendMessage(
+  sendMessage(
     roomId: number,
     content: string,
     fileUrl?: string,
     audioUrl?: string
-): Observable<Message> {
+  ): Observable<Message> {
     const payload: any = { content };
     if (fileUrl) payload.file_url = fileUrl;
     if (audioUrl) payload.audio_url = audioUrl;
     
-    // Ensure the URL has proper formatting
     const url = `${this.apiUrl}/send-message/${roomId}/`;
     
     return this.http
@@ -105,27 +102,20 @@ sendMessage(
             headers: this.getHeaders() 
         })
         .pipe(catchError(this.handleError));
-}
+  }
 
-  
-
-
-
-// In chat.service.ts - fix getAllUsers to return proper data
-getAllUsers(): Observable<User[]> {
+  getAllUsers(): Observable<User[]> {
     return this.http
         .get<User[]>(`${this.apiUrl}/get-all-users/`, {
           headers: this.getHeaders(),
         })
         .pipe(
-            tap(users => console.log('👥 DEBUG: Users from API:', users)),
-            catchError(this.handleError)
+          tap(users => console.log('👥 DEBUG: Users from API:', users)),
+          catchError(this.handleError)
         );
-}
+  }
 
-
-
-  createChatRoom(payload: { sender_id: number; receiver_id: number }): Observable<CreateChatRoomResponse> {
+  createChatRoom(payload: { receiver_id: number }): Observable<CreateChatRoomResponse> {
     return this.http
         .post<CreateChatRoomResponse>(`${this.apiUrl}/create-chat-room/`, payload, {
           headers: this.getHeaders(),
@@ -142,61 +132,59 @@ getAllUsers(): Observable<User[]> {
         );
   }
 
-connect(roomId: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const token = localStorage.getItem('token');
-    if (!token || !roomId) {
-      return reject('Invalid token or room');
-    }
-
-    // Use the corrected environment configuration
-    const protocol = 'wss://'; // Since your API uses HTTPS, use WSS
-    const host = environment.wsHost; // This should now be just 'api.designpro.qa'
-    
-    const wsUrl = `${protocol}${host}/ws/chat/${roomId}/?token=${token}`;
-
-    console.log('🔌 WebSocket connecting to:', wsUrl);
-    
-    this.socket = new WebSocket(wsUrl);
-
-    this.socket.onopen = () => {
-      console.log('✅ WebSocket connected');
-      this.isConnected = true;
-      resolve();
-    };
-
-    this.socket.onerror = (error) => {
-      console.error('❌ WebSocket error:', error);
-      this.isConnected = false;
-      reject(`WebSocket connection failed: ${error}`);
-    };
-
-    this.socket.onmessage = (event) => {
-      try {
-        const data: WebSocketMessage = JSON.parse(event.data);
-        if (data.type === 'chat_message') {
-          this.listeners.forEach((listener) => listener(data.message));
-        }
-      } catch (error) {
-        console.error('Error parsing WebSocket message:', error);
+  connect(roomId: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      const token = localStorage.getItem('token');
+      if (!token || !roomId) {
+        return reject('Invalid token or room');
       }
-    };
 
-    this.socket.onclose = (event) => {
-      console.log('🔌 WebSocket disconnected', event);
-      this.isConnected = false;
-      if (!event.wasClean) {
-        console.error('WebSocket closed unexpectedly');
-        setTimeout(() => {
-          if (roomId && this.socket === null) { // Only reconnect if socket is null
-            console.log('🔄 Attempting to reconnect...');
-            this.connect(roomId).catch(err => console.error('Reconnect failed:', err));
+      const protocol = 'wss://';
+      const host = environment.wsHost;
+      const wsUrl = `${protocol}${host}/ws/chat/${roomId}/?token=${token}`;
+
+      console.log('🔌 WebSocket connecting to:', wsUrl);
+      
+      this.socket = new WebSocket(wsUrl);
+
+      this.socket.onopen = () => {
+        console.log('✅ WebSocket connected');
+        this.isConnected = true;
+        resolve();
+      };
+
+      this.socket.onerror = (error) => {
+        console.error('❌ WebSocket error:', error);
+        this.isConnected = false;
+        reject(error);
+      };
+
+      this.socket.onmessage = (event) => {
+        try {
+          const data: WebSocketMessage = JSON.parse(event.data);
+          if (data.type === 'chat_message') {
+            this.listeners.forEach((listener) => listener(data.message));
           }
-        }, 5000);
-      }
-    };
-  });
-}
+        } catch (error) {
+          console.error('Error parsing WebSocket message:', error);
+        }
+      };
+
+      this.socket.onclose = (event) => {
+        console.log('🔌 WebSocket disconnected', event);
+        this.isConnected = false;
+        if (!event.wasClean) {
+          console.error('WebSocket closed unexpectedly');
+          setTimeout(() => {
+            if (roomId && this.socket === null) {
+              console.log('🔄 Attempting to reconnect...');
+              this.connect(roomId).catch(err => console.error('Reconnect failed:', err));
+            }
+          }, 5000);
+        }
+      };
+    });
+  }
 
   disconnect(): void {
     if (this.socket) {
@@ -211,7 +199,7 @@ connect(roomId: string): Promise<void> {
     this.listeners.push(callback);
   }
 
- private handleError(error: any): Observable<never> {
+  private handleError(error: any): Observable<never> {
     console.error('Chat Service Error:', error);
     let errorMessage = 'An error occurred';
     
@@ -226,5 +214,5 @@ connect(roomId: string): Promise<void> {
     }
     
     return throwError(() => new Error(errorMessage));
-}
+  }
 }
